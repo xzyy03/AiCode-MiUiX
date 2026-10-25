@@ -1,24 +1,26 @@
 name: Deploy Docs
 
-# 文档站只在打 tag 时部署，避免 main 上尚未随版本发布的文档被公开。
-# Vercel 的 Git 自动部署已在 docs-site/vercel.json 用 git.deploymentEnabled=false 关闭，
-# 生产部署统一由本工作流用 Vercel CLI 完成。
-# 前置配置（GitHub 仓库 Secret）：VERCEL_TOKEN、VERCEL_ORG_ID、VERCEL_PROJECT_ID
-# Vercel 项目需设置 Root Directory = docs-site。CLI 必须从仓库根运行（官方 monorepo 指南）：
-# 在子目录里跑 vercel 会读不到 docs-site/vercel.json，退回 VitePress preset 默认命令而报 vitepress not found。
+# 文档站部署到 GitHub Pages（Actions 构建产物），不再依赖 Vercel 账号。
+# 前置：仓库 Settings → Pages → Source = GitHub Actions（本工作流会自动初始化）。
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
-  deploy:
-    name: Deploy Docs to Vercel
+  build:
+    name: Build Docs
     runs-on: ubuntu-latest
-    env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,14 +32,33 @@ jobs:
           cache: npm
           cache-dependency-path: docs-site/package-lock.json
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+      - name: Install dependencies
+        working-directory: docs-site
+        run: npm ci
 
-      - name: Pull Vercel environment
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build site
+        working-directory: docs-site
+        env:
+          # Pages 项目站点路径：/<repo>/；本地/Vercel 不设则为根路径
+          DOCS_BASE: /${{ github.event.repository.name }}/
+        run: npm run build
 
-      - name: Build
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs-site/.vitepress/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        id: deployment
+        uses: actions/deploy-pages@v4

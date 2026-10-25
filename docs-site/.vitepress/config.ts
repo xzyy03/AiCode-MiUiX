@@ -5,7 +5,11 @@ import { defineConfig } from 'vitepress'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
+// GitHub Pages 项目站点部署在 /<repo>/ 子路径下，构建时用 DOCS_BASE 注入；本地/Vercel 默认根路径。
+const base = process.env.DOCS_BASE || '/'
+
 export default defineConfig({
+  base,
   srcDir: './docs',
   locales: {
     root: {
