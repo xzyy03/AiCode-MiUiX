@@ -1,6 +1,8 @@
 package com.aicode.feature.agent.presentation.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,6 +62,7 @@ import kotlinx.coroutines.launch
 /**
  * 输入区下行的模型切换图标按钮
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ModelIconButton(
     provider: AIProviderConfig?,
@@ -69,12 +73,23 @@ internal fun ModelIconButton(
     forceOpenSheet: Boolean = false,
     onSelectSuccessInOnboarding: (() -> Unit)? = null,
     onSheetDismiss: (() -> Unit)? = null,
+    /** 长按模型图标：直接跳到 AI 供应商设置页，方便添加供应商。 */
+    onOpenProviders: (() -> Unit)? = null,
     runModelTest: (suspend (AIProviderConfig, String) -> ModelTestResult)? = null
 ) {
     var showSheet by remember { mutableStateOf(false) }
     val effectiveShowSheet = showSheet || forceOpenSheet
 
-    IconButton(onClick = { showSheet = true }, modifier = modifier.size(36.dp)) {
+    Box(
+        modifier = modifier
+            .size(36.dp)
+            .clip(CircleShape)
+            .combinedClickable(
+                onClick = { showSheet = true },
+                onLongClick = onOpenProviders
+            ),
+        contentAlignment = Alignment.Center
+    ) {
         ModelLogoIcon(modelName = provider?.effectiveModel.orEmpty(), size = 20.dp)
     }
 

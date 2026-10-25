@@ -121,6 +121,7 @@ import com.aicode.core.ui.ExpandableChevronIcon
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.AlertCircle
 import compose.icons.feathericons.ArrowUp
+import compose.icons.feathericons.Box
 import compose.icons.feathericons.Check
 import compose.icons.feathericons.ChevronDown
 import compose.icons.feathericons.ChevronUp
@@ -204,6 +205,10 @@ internal fun ChatInputBar(
     forceOpenModelSheet: Boolean = false,
     onSelectModelInOnboarding: (() -> Unit)? = null,
     onModelSheetDismiss: (() -> Unit)? = null,
+    /** 长按模型图标时打开 AI 供应商设置页。 */
+    onOpenProviders: () -> Unit = {},
+    /** 点击输入区的 MCP 图标，直接打开 MCP 服务器设置页。 */
+    onOpenMcp: () -> Unit = {},
     /** 主页模型弹层的连通性测试：null（无设置页 ViewModel 的宿主）时弹层不显示测试按钮。 */
     onRunModelTest: (suspend (AIProviderConfig, String) -> ModelTestResult)? = null,
     modifier: Modifier = Modifier
@@ -626,6 +631,7 @@ internal fun ChatInputBar(
                             forceOpenSheet = forceOpenModelSheet,
                             onSelectSuccessInOnboarding = onSelectModelInOnboarding,
                             onSheetDismiss = onModelSheetDismiss,
+                            onOpenProviders = onOpenProviders,
                             runModelTest = onRunModelTest,
                             modifier = Modifier.onboardingTarget(OnboardingStep.OPEN_MODEL_PICKER)
                         )
@@ -637,6 +643,18 @@ internal fun ChatInputBar(
                                 onSwitchConfirmed = onSwitchWorkspaceConfirmed,
                                 modifier = Modifier.size(36.dp),
                                 iconSize = 20.dp
+                            )
+                        }
+
+                        IconButton(
+                            onClick = onOpenMcp,
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Icon(
+                                FeatherIcons.Box,
+                                contentDescription = stringResource(R.string.settings_mcp),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(20.dp)
                             )
                         }
 

@@ -659,6 +659,10 @@ fun AIChatPanel(
     onNavigateToTerminal: () -> Unit = {},
     onNavigateToGit: () -> Unit = {},
     onNavigateToBrowser: () -> Unit = {},
+    /** 长按输入区模型图标：跳到设置的「AI 供应商」页。 */
+    onNavigateToProviders: () -> Unit = {},
+    /** 点击输入区 MCP 图标：跳到设置的「MCP 服务器」页。 */
+    onNavigateToMcp: () -> Unit = {},
     settingsViewModel: SettingsViewModel? = null,
     workspaceViewModel: WorkspaceViewModel? = null,
     onOpenDrawer: () -> Unit,
@@ -1853,6 +1857,8 @@ fun AIChatPanel(
                 forceOpenModelSheet = onboardingStep == OnboardingStep.SIMULATE_CHOOSE_MODEL,
                 onSelectModelInOnboarding = onSelectModelInOnboarding,
                 onModelSheetDismiss = onDismissModelSheetInOnboarding,
+                onOpenProviders = onNavigateToProviders,
+                onOpenMcp = onNavigateToMcp,
                 // 主页模型弹层的「测试」按钮：直接复用设置页的连通性测试链路，状态由弹层自己持有。
                 onRunModelTest = settingsViewModel?.let { svm -> { p, m -> svm.runModelTest(p, m) } },
                 modifier = Modifier

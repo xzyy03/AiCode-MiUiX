@@ -35,6 +35,13 @@ class MemoryRepository @Inject constructor(
             .map { it.value.last() }
     }
 
+    /** 只列全局记忆（设置页分组展示用）。 */
+    fun listGlobalMemories(): List<Memory> = globalMemorySource.listMemories()
+
+    /** 只列项目记忆；未选工作区时为空。 */
+    fun listProjectMemories(projectRoot: String?): List<Memory> =
+        if (projectRoot.isNullOrBlank()) emptyList() else projectSource(projectRoot).listMemories()
+
     /** 读取指定 memory 的完整指令正文；不存在 / 解析失败返回 null。 */
     fun loadContent(name: String, projectRoot: String?): String? {
         // 优先从项目级读取

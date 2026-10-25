@@ -89,6 +89,7 @@ import com.aicode.feature.settings.domain.model.AIProviderConfig
 import com.aicode.feature.settings.domain.model.ModelMetadata
 import com.aicode.feature.settings.presentation.SettingsViewModel
 import com.aicode.feature.settings.presentation.ShizukuViewModel
+import com.aicode.feature.settings.presentation.MemoryViewModel
 import com.aicode.feature.settings.presentation.SkillImportState
 import com.aicode.feature.settings.presentation.SkillUiEntry
 import com.aicode.feature.agent.domain.skill.SkillImportError
@@ -153,6 +154,7 @@ internal enum class SettingsSection(@param:StringRes val titleRes: Int) {
     DefaultModels(R.string.settings_default_models),
     Mcp(R.string.settings_mcp),
     Skills(R.string.settings_skills),
+    Memory(R.string.settings_memory),
     Prompts(R.string.prompts_title),
     PromptDetail(R.string.prompts_title),
     PromptEditor(R.string.prompts_title),
@@ -206,7 +208,9 @@ fun SettingsScreen(
     onRerunOnboarding: () -> Unit = {},
     onboardingStep: OnboardingStep? = null,
     onOnboardingModelAdded: (() -> Unit)? = null,
-    onOnboardingDismissFetchDialog: (() -> Unit)? = null
+    onOnboardingDismissFetchDialog: (() -> Unit)? = null,
+    /** 从外部（如聊天输入区长按模型）直接跳到某个二级页；null 回菜单首页。 */
+    initialSectionKey: String? = null
 ) {
     val providers by viewModel.providers.collectAsStateWithLifecycle()
     val logLevel by viewModel.logLevel.collectAsStateWithLifecycle()
@@ -294,7 +298,17 @@ fun SettingsScreen(
     }
 
 
-    var section by remember { mutableStateOf(SettingsSection.Menu) }
+    // 从聊天页快捷入口直达的二级页：返回直接退回聊天，不先回设置菜单。
+    val shortcutEntrySection = remember(initialSectionKey) {
+        when (initialSectionKey) {
+            "providers" -> SettingsSection.Providers
+            "mcp" -> SettingsSection.Mcp
+            else -> null
+        }
+    }
+    var section by remember(initialSectionKey) {
+        mutableStateOf(shortcutEntrySection ?: SettingsSection.Menu)
+    }
     var logReturnSection by remember { mutableStateOf(SettingsSection.Menu) }
     // 各列表页的多选状态：顶栏「多选」开关在本页 Scaffold 里，所以状态必须提到这里统一持有。
     // 用普通 map（非 snapshot）新建容器，避免在组合期写快照状态；Compose 状态在 ListSelectionState 内部。
@@ -419,7 +433,7 @@ fun SettingsScreen(
         SettingsSection.SubAgentDetail -> SettingsSection.SubAgents
         SettingsSection.SubAgentEditor -> subAgentEditorReturn
         SettingsSection.ContainerDownloads -> SettingsSection.Container
-        else -> if (expanded) null else SettingsSection.Menu
+        else -> if (expanded || section == shortcutEntrySection) null else SettingsSection.Menu
     }
 
     // 有上一层时系统返回键先回上一层；没有则交还给上层导航。
@@ -1003,6 +1017,11 @@ fun SettingsScreen(
                         viewModel.setSkillsEnabled(targets.map { it.name to it.scope }, enabled)
                     }
                 )
+                SettingsSection.Memory -> {
+                    val memoryViewModel: MemoryViewModel =
+                        androidx.hilt.navigation.compose.hiltViewModel()
+                    MemorySection(viewModel = memoryViewModel)
+                }
                 SettingsSection.Prompts -> {
                     val promptsViewModel: com.aicode.feature.settings.presentation.PromptsViewModel =
                         androidx.hilt.navigation.compose.hiltViewModel()
@@ -1734,6 +1753,12 @@ internal fun SettingsMenu(
                 icon = FeatherIcons.Book,
                 title = stringResource(SettingsSection.Skills.titleRes),
                 onClick = { onOpen(SettingsSection.Skills) }
+            )
+            SettingsDivider()
+            SettingsRow(
+                icon = FeatherIcons.BookOpen,
+                title = stringResource(SettingsSection.Memory.titleRes),
+                onClick = { onOpen(SettingsSection.Memory) }
             )
             SettingsDivider()
             SettingsRow(

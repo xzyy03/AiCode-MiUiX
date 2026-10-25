@@ -695,6 +695,12 @@ fun AppNavigation(
                                     onNavigateToTerminal = { openWorkbench(WorkbenchPaneKind.TERMINAL) },
                                     onNavigateToGit = { openWorkbench(WorkbenchPaneKind.GIT) },
                                     onNavigateToBrowser = { openWorkbench(WorkbenchPaneKind.BROWSER) },
+                                    onNavigateToProviders = {
+                                        navController.navigate("settings?section=providers&from=chat")
+                                    },
+                                    onNavigateToMcp = {
+                                        navController.navigate("settings?section=mcp&from=chat")
+                                    },
                                     terminalActive = paneOpen && paneKind == WorkbenchPaneKind.TERMINAL,
                                     gitActive = paneOpen && paneKind == WorkbenchPaneKind.GIT,
                                     browserActive = paneOpen && paneKind == WorkbenchPaneKind.BROWSER,
@@ -740,17 +746,33 @@ fun AppNavigation(
                     }
                 }
             }
-            composable("settings") {
+            composable(
+                "settings?section={section}&from={from}",
+                arguments = listOf(
+                    androidx.navigation.navArgument("section") {
+                        type = androidx.navigation.NavType.StringType
+                        defaultValue = ""
+                    },
+                    androidx.navigation.navArgument("from") {
+                        type = androidx.navigation.NavType.StringType
+                        defaultValue = ""
+                    }
+                )
+            ) { entry ->
+                val initialSectionKey = entry.arguments?.getString("section").orEmpty()
+                // 从聊天页快捷入口进来的：返回时直接回聊天，不代开侧栏抽屉。
+                val fromChat = entry.arguments?.getString("from") == "chat"
                 // 复用 Activity 级 settingsViewModel（MainActivity 顶部已创建并 init），
                 // 避免进入设置页时再建一个 NavBackStackEntry 级实例、重复跑 init 与 9 路 flow 订阅，
                 // 这是侧边栏点设置「卡一下」的主因。
                 CompactTypography(0.9f) {
                 SettingsScreen(
+                    initialSectionKey = initialSectionKey,
                     viewModel = settingsViewModel,
                     onNavigateBack = {
                         navController.popBackStack()
-                        // 大屏返回聊天页后侧栏本就常驻，不再弹 modal 抽屉。
-                        if (!expanded) scope.launch { drawerState.open() }
+                        // 大屏返回聊天页后侧栏本就常驻；从聊天快捷入口进来的也不弹抽屉。
+                        if (!expanded && !fromChat) scope.launch { drawerState.open() }
                     },
                     onStopAllAndCloseTerminal = { agentViewModel.stopAllAndCloseTerminal() },
                     onRerunOnboarding = {
