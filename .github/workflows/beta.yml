@@ -1,7 +1,7 @@
 name: Beta Build
 
 # push 到 main 时自动构建一个测试包：universal flavor、正式签名、与 release 同配置（R8/资源压缩），
-# 仅 applicationId 后缀 .beta（com.aicode.beta，可与正式版同机共存）。
+# 仅 applicationId 后缀 .beta（com.muse.beta，可与正式版同机共存）。
 # 产物上传到 Actions Artifacts（默认保留 90 天），不进 GitHub Release。
 # 打 v* tag 的正式发版走 android-release.yml；合入前门禁走 ci.yml。
 on:
