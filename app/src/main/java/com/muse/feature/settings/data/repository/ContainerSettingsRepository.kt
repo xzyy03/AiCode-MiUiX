@@ -109,10 +109,8 @@ class ContainerSettingsRepository @Inject constructor(
     }
 
     /**
-     * 首次启动只做列表顺序归一，不再自动补入内置 Alpine；容器镜像由用户手动添加/下载。
-     */：列表历史上「新建在前」是靠读取时按 createdAt 倒序排出来的，
-     * 存储顺序其实是插入序（旧在前）。改用显式拖拽顺序后不再实时排序，
-     * 故首次升级把存储顺序按 createdAt 倒序重写一次，保证升级前后用户看到的一致。
+     * 首次启动只做列表顺序归一：存储顺序历史上是插入序（旧在前），按 createdAt 倒序重写一次，
+     * 保证升级前后用户看到的一致；不再自动补入内置 Alpine，容器镜像由用户手动添加/下载。
      */
     suspend fun ensureProfileDisplayOrder() {
         context.containerDataStore.edit { prefs ->
