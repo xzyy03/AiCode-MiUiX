@@ -54,6 +54,15 @@ data class ContainerProfile(
             extraArgs = DEFAULT_PROOT_ARGS,
             isBuiltin = true
         )
+
+        /** 无容器占位：id/name 为空，UI 与引擎据此判定「尚未添加容器」。 */
+        val NONE = ContainerProfile(
+            id = "",
+            name = "",
+            rootfsSource = RootfsSource.Asset(""),
+            shellPath = null,
+            isBuiltin = false
+        )
     }
 }
 

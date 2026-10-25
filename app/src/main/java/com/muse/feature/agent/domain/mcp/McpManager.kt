@@ -251,7 +251,7 @@ class McpManager @Inject constructor(
     private suspend fun currentActiveProfile(): ContainerProfile {
         val id = containerSettingsRepository.activeProfileIdFlow.first()
         val profiles = containerSettingsRepository.customProfilesFlow.first()
-        return profiles.firstOrNull { it.id == id } ?: ContainerProfile.BUILTIN_ALPINE
+        return profiles.firstOrNull { it.id == id } ?: ContainerProfile.NONE
     }
 
     /** 默认容器：设置的 id 且为本地 PRoot 模式；找不到/被删/是远程则回退内置 Alpine。 */
@@ -259,7 +259,7 @@ class McpManager @Inject constructor(
         val id = containerSettingsRepository.defaultContainerIdFlow.first()
         val profiles = containerSettingsRepository.customProfilesFlow.first()
         return profiles.firstOrNull { it.id == id && it.mode == ExecutionMode.LOCAL_PROOT }
-            ?: ContainerProfile.BUILTIN_ALPINE
+            ?: ContainerProfile.NONE
     }
 
     /**

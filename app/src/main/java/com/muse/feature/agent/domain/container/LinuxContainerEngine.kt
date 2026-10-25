@@ -100,7 +100,7 @@ class LinuxContainerEngine @Inject constructor(
      * 启动首帧为内置 Alpine（等同改动前）；profile 切换后由 flow collector 更新。fallback 到内置保证安全。
      */
     @Volatile
-    private var currentProfile: ContainerProfile = ContainerProfile.BUILTIN_ALPINE
+    private var currentProfile: ContainerProfile = ContainerProfile.NONE
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -112,13 +112,13 @@ class LinuxContainerEngine @Inject constructor(
 
     /**
      * 按 id 解析 profile：从持久化列表找，找不到回退列表第一个，再兜底内置 Alpine（保证引擎始终可用）。
-     * 列表里持久化的 Alpine 覆盖项优先于 [ContainerProfile.BUILTIN_ALPINE] 常量（用户编辑过的配置生效）。
+     * 列表里持久化的 Alpine 覆盖项优先于 [ContainerProfile.NONE] 常量（用户编辑过的配置生效）。
      */
     private suspend fun resolveProfile(id: String): ContainerProfile {
         val profiles = containerSettingsRepository.customProfilesFlow.first()
         return profiles.firstOrNull { it.id == id }
             ?: profiles.firstOrNull()
-            ?: ContainerProfile.BUILTIN_ALPINE
+            ?: ContainerProfile.NONE
     }
 
     /**

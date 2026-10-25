@@ -39,7 +39,7 @@ class StdioTransport(
     private val programArgs: List<String>,
     private val projectPath: String?,
     private val extraEnv: Map<String, String> = emptyMap(),
-    private val runtimeProfile: ContainerProfile = ContainerProfile.BUILTIN_ALPINE,
+    private val runtimeProfile: ContainerProfile = ContainerProfile.NONE,
     private val json: Json = DEFAULT_JSON
 ) : McpTransport {
 

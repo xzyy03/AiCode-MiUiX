@@ -43,7 +43,7 @@ class ActiveRemoteConnectionResolver @Inject constructor(
         connections: List<RemoteConnectionEntity>
     ): RemoteConnectionConfig? {
         val profile = profiles.firstOrNull { it.id == activeId }
-            ?: ContainerProfile.BUILTIN_ALPINE.takeIf { it.id == activeId }
+            ?: ContainerProfile.NONE.takeIf { it.id == activeId }
             ?: return null
         val ssh = profile.rootfsSource as? RootfsSource.RemoteSsh ?: return null
         val conn = connections.firstOrNull { it.id == ssh.connectionId } ?: return null

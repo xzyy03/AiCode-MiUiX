@@ -52,7 +52,7 @@ class WorkspacePathMapper @Inject constructor(
      * 调用之间有自然顺序，实际不影响。
      */
     @Volatile
-    private var currentProfile: ContainerProfile = ContainerProfile.BUILTIN_ALPINE
+    private var currentProfile: ContainerProfile = ContainerProfile.NONE
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -66,7 +66,7 @@ class WorkspacePathMapper @Inject constructor(
         val profiles = containerSettingsRepository.customProfilesFlow.first()
         return profiles.firstOrNull { it.id == id }
             ?: profiles.firstOrNull()
-            ?: ContainerProfile.BUILTIN_ALPINE
+            ?: ContainerProfile.NONE
     }
 
     /** 当前工作区在宿主上的根目录。 */

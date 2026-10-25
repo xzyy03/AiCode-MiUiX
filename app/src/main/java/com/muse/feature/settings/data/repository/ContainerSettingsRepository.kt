@@ -97,7 +97,7 @@ class ContainerSettingsRepository @Inject constructor(
     val activeProfileFlow: Flow<ContainerProfile> = combine(activeProfileIdFlow, customProfilesFlow) { id, profiles ->
         profiles.firstOrNull { it.id == id }
             ?: profiles.firstOrNull()
-            ?: ContainerProfile.BUILTIN_ALPINE
+            ?: ContainerProfile.NONE
     }
 
     suspend fun setActiveProfile(id: String) {

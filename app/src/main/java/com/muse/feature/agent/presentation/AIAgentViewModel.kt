@@ -530,11 +530,12 @@ class AIAgentViewModel @Inject constructor(
     /**
      * 当前容器根节点的显示名与图标来源：名称取当前 profile，系统类型取已检测缓存，[FileTreeRoot.Container.remote] 看其执行模式。
      */
-    private val containerRootNode: Flow<FileTreeRoot.Container> = combine(
+    private val containerRootNode: Flow<FileTreeRoot.Container?> = combine(
         containerSettingsRepository.activeProfileFlow,
         containerOsDetector.osMap
     ) { profile, osMap ->
-        FileTreeRoot.Container(
+        if (profile.id.isBlank()) null
+        else FileTreeRoot.Container(
             label = profile.name,
             osId = osMap[profile.id],
             remote = profile.mode == ExecutionMode.REMOTE_SSH
@@ -566,7 +567,7 @@ class AIAgentViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FileBrowseState.Loading)
 
     /** 读取工作区根与当前容器根，按 [expanded] 递归展开，产出扁平的可见节点列表；工作区根读取失败则整体报错。 */
-    private fun buildBrowseTree(expanded: Set<String>, containerRoot: FileTreeRoot.Container): FileBrowseState {
+    private fun buildBrowseTree(expanded: Set<String>, containerRoot: FileTreeRoot.Container?): FileBrowseState {
         val workspaceRoot = WorkspacePathMapper.CONTAINER_ROOT
         val workspaceEntries = runCatching { fileAccess.listFiles(workspaceRoot) }.getOrElse { e ->
             FileLogger.w(TAG, "列目录失败: $workspaceRoot", e)
@@ -580,19 +581,22 @@ class AIAgentViewModel @Inject constructor(
                 ignorePatterns = loadRootGitignore(workspaceRoot), relParts = emptyList(), out = nodes
             )
         }
-        // 当前容器根：读不到（容器未安装、远程未连接）时只把该行标红，不影响工作区那棵。
-        val containerExpanded = CONTAINER_FS_ROOT in expanded
-        val containerEntries = if (containerExpanded) {
-            runCatching { fileAccess.listFiles(CONTAINER_FS_ROOT) }.getOrNull()
-        } else {
-            null
-        }
-        nodes += rootNode(containerRoot, CONTAINER_FS_ROOT, expanded, hasError = containerExpanded && containerEntries == null)
-        if (containerEntries != null) {
-            appendBrowseChildren(
-                CONTAINER_FS_ROOT, containerEntries, depth = 1, expanded = expanded,
-                ignorePatterns = emptyList(), relParts = emptyList(), out = nodes
-            )
+        // 当前容器根：读不到（容器未安装、远程未连接）时只把该行标红，不影响工作区那棵；
+        // 还没添加容器时（containerRoot == null）整行不展示。
+        if (containerRoot != null) {
+            val containerExpanded = CONTAINER_FS_ROOT in expanded
+            val containerEntries = if (containerExpanded) {
+                runCatching { fileAccess.listFiles(CONTAINER_FS_ROOT) }.getOrNull()
+            } else {
+                null
+            }
+            nodes += rootNode(containerRoot, CONTAINER_FS_ROOT, expanded, hasError = containerExpanded && containerEntries == null)
+            if (containerEntries != null) {
+                appendBrowseChildren(
+                    CONTAINER_FS_ROOT, containerEntries, depth = 1, expanded = expanded,
+                    ignorePatterns = emptyList(), relParts = emptyList(), out = nodes
+                )
+            }
         }
         return FileBrowseState.Success(nodes)
     }
