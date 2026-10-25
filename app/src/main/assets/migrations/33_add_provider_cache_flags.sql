@@ -1,0 +1,2 @@
+ALTER TABLE ai_providers ADD COLUMN anthropicCacheBreakpoints INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE ai_providers ADD COLUMN openaiChatCacheKey INTEGER NOT NULL DEFAULT 0;

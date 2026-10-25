@@ -1,0 +1,102 @@
+[
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "type": "OPENAI",
+    "baseUrl": "https://api.openai.com/",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "type": "ANTHROPIC",
+    "baseUrl": "https://api.anthropic.com/",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "type": "OPENAI",
+    "baseUrl": "https://api.deepseek.com/",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "google",
+    "name": "Google",
+    "type": "GEMINI",
+    "baseUrl": "https://generativelanguage.googleapis.com/",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "xai",
+    "name": "xAI (Grok)",
+    "type": "OPENAI",
+    "baseUrl": "https://api.x.ai/",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "alibaba",
+    "name": "Qwen",
+    "type": "OPENAI",
+    "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "zai",
+    "name": "Z.AI (智谱)",
+    "type": "OPENAI",
+    "baseUrl": "https://open.bigmodel.cn/api/paas/v4",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "moonshotai",
+    "name": "Kimi",
+    "type": "OPENAI",
+    "baseUrl": "https://api.moonshot.cn/v1",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "minimax",
+    "name": "MiniMax",
+    "type": "OPENAI",
+    "baseUrl": "https://api.minimax.io/",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  },
+  {
+    "id": "xiaomi",
+    "name": "MiMo",
+    "type": "OPENAI",
+    "baseUrl": "https://api.xiaomimimo.com/v1",
+    "isRecommended": false,
+    "badge": null,
+    "websiteUrl": null,
+    "tags": []
+  }
+]

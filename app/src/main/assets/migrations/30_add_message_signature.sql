@@ -1,0 +1,1 @@
+ALTER TABLE agent_messages ADD COLUMN signature TEXT;

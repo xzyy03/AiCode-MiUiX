@@ -1,0 +1,39 @@
+# Built outputs
+.gradle/
+build/
+app/build/
+
+# IDE
+.idea/
+*.iml
+
+# Local config
+local.properties
+
+# Signing (release keystore + passwords — never commit)
+*.jks
+*.keystore
+keystore.properties
+
+# Debug / profiling
+*.hprof
+
+# Claude
+.claude/
+/.kotlin/
+/.agents/
+/.aicode/
+
+# 临时调试文件
+/*.log
+log-*.txt
+*.apk
+/test
+
+# Python（模型数据更新脚本）
+__pycache__/
+*.pyc
+
+# 容器镜像目录：由 scripts/sync-container-images.py 生成，CI 发布到 data 分支；
+# 内置兜底快照另存于 app/src/main/assets/container-images.json
+/data/container-images.json

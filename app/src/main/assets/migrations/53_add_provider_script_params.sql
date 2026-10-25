@@ -1,0 +1,1 @@
+ALTER TABLE ai_providers ADD COLUMN scriptParams TEXT NOT NULL DEFAULT '';

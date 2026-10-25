@@ -1,0 +1,43 @@
+name: Deploy Docs
+
+# 文档站只在打 tag 时部署，避免 main 上尚未随版本发布的文档被公开。
+# Vercel 的 Git 自动部署已在 docs-site/vercel.json 用 git.deploymentEnabled=false 关闭，
+# 生产部署统一由本工作流用 Vercel CLI 完成。
+# 前置配置（GitHub 仓库 Secret）：VERCEL_TOKEN、VERCEL_ORG_ID、VERCEL_PROJECT_ID
+# Vercel 项目需设置 Root Directory = docs-site。CLI 必须从仓库根运行（官方 monorepo 指南）：
+# 在子目录里跑 vercel 会读不到 docs-site/vercel.json，退回 VitePress preset 默认命令而报 vitepress not found。
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Docs to Vercel
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: docs-site/package-lock.json
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

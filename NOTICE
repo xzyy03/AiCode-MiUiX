@@ -1,0 +1,135 @@
+AiCode MiUiX
+Copyright (C) 2026 AiCode MiUiX contributors
+
+This repository is a modified version of AiCode:
+    Upstream: https://github.com/jieapi/AiCode
+    Original author: jieapi (https://github.com/jieapi)
+    Upstream license: GNU General Public License version 3.0 (GPL-3.0)
+
+Modification notice (GPL-3.0 section 5a):
+    Changes made on 2026-10-25 are limited to the user interface styling
+    (miuix / HyperOS look), plus an additional "miuix" build variant with a
+    distinct applicationId (com.aicode.miuix) so that it can be installed
+    alongside the official build. No business logic was intentionally changed.
+    All modifications are released under GPL-3.0 as well.
+
+AiCode
+Copyright (C) 2026 AiCode contributors
+
+This product is licensed under the GNU General Public License version 3.0
+(GPL-3.0). See the LICENSE file for the full license text.
+
+This product also includes third-party components distributed under their
+own licenses. Their copyright and license notices are preserved below in
+accordance with the respective license terms.
+
+========================================================================
+1. sora-editor
+------------------------------------------------------------------------
+   Project:  https://github.com/Rosemoe/sora-editor
+   Copyright (C) 2020-2024 Rosemoe
+   License:  GNU Lesser General Public License v2.1 or later
+             (LGPL-2.1-or-later)
+
+   sora-editor is used as an unmodified, independently distributable
+   library (io.github.rosemoe:editor and io.github.rosemoe:language-textmate,
+   v0.24.4). Pursuant to the relicensing clause of LGPL-2.1, it may be
+   used under the terms of LGPL-3.0, which is compatible with this
+   product's GPL-3.0 license. Source code is available from the project
+   URL above.
+
+========================================================================
+2. Termux terminal-emulator / terminal-view
+------------------------------------------------------------------------
+   Project:  https://github.com/termux/termux-app
+   License:  Apache License 2.0
+
+   The terminal-emulator and terminal-view modules in this repository are
+   derived from the Termux project, whose LICENSE.md states that the
+   Terminal Emulator for Android code (jackpal/Android-Terminal-Emulator)
+   is released under the Apache License 2.0.
+
+========================================================================
+3. desugar_jdk_libs
+------------------------------------------------------------------------
+   Project:  https://github.com/google/desugar_jdk_libs
+   License:  GNU General Public License v2.0 with the Classpath Exception
+
+   Used as a build-time core library desugaring tool
+   (com.android.tools:desugar_jdk_libs).
+
+========================================================================
+4. Alpine Linux container image (assets/container)
+------------------------------------------------------------------------
+   Project:  https://alpinelinux.org
+   License:  Various
+
+   The packaged container rootfs is built from Alpine Linux packages,
+   each under its own license (e.g. busybox under GPL-2.0, musl under
+   MIT). Full license texts are available inside the image's package
+   metadata and on the Alpine Linux project site.
+
+========================================================================
+5. jlatexmath-android
+------------------------------------------------------------------------
+   Project:  https://github.com/noties/jlatexmath-android
+             (fork of https://github.com/opencollab/jlatexmath)
+   License:  GNU General Public License v2.0 or later (GPL-2.0-or-later)
+
+   Used to render LaTeX math formulas to bitmaps in Markdown
+   (ru.noties:jlatexmath-android). Distributed as an unmodified library;
+   its GPL-2.0-or-later terms allow use under GPL-3.0, compatible with
+   this product's license.
+
+========================================================================
+6. Components under the Apache License 2.0
+------------------------------------------------------------------------
+   The following libraries are distributed under the Apache License 2.0
+   (https://www.apache.org/licenses/LICENSE-2.0), copyright by their
+   respective authors:
+
+   - Jetpack Compose & AndroidX libraries (androidx.*: compose, material3,
+     lifecycle, navigation, activity, core, appcompat, room, datastore,
+     work-runtime, hilt-navigation, etc.)
+   - Dagger / Hilt (com.google.dagger:*)
+   - Retrofit, OkHttp & logging-interceptor (com.squareup.*)
+   - kotlinx-coroutines, kotlinx-serialization (org.jetbrains.kotlinx.*)
+   - Vico (com.patrykandpatrick.vico:*)
+   - multiplatform-markdown-renderer & -code (com.mikepenz.*)
+   - highlights (dev.snipme:highlights-jvm)
+   - ComposeReorderable (sh.calvin.reorderable:*)
+   - Compose Icons - Feather (br.com.devsrsouza.compose.icons:*)
+   - SnakeYAML (org.yaml:snakeyaml)
+   - sshj (com.hierynomus:sshj)
+   - commons-net, commons-compress, ftpserver-core (org.apache.*)
+   - Material Design Icons (AndroidX material-icons-*)
+
+========================================================================
+7. Components under MIT-style licenses
+------------------------------------------------------------------------
+   - jsoup (https://jsoup.org), Copyright (C) Jonathan Hedley — MIT
+   - SLF4J (https://www.slf4j.org) — MIT
+   - Bouncy Castle (https://www.bouncycastle.org) — Bouncy Castle
+     Licence (MIT-style)
+   - XZ for Java (org.tukaani:xz) — 0BSD
+
+========================================================================
+8. JetBrains Mono NL (bundled terminal font)
+------------------------------------------------------------------------
+   Project:  https://github.com/JetBrains/JetBrainsMono
+   Copyright 2020 The JetBrains Mono Project Authors
+   License:  SIL Open Font License, Version 1.1 (OFL-1.1)
+
+   The file app/src/main/res/font/jetbrains_mono_nl.ttf is an unmodified
+   copy of JetBrainsMonoNL-Regular.ttf from JetBrains Mono v2.304, used
+   as the default terminal font. The full license text is bundled in the
+   APK at assets/licenses/JetBrainsMono-OFL-1.1.txt.
+
+========================================================================
+9. Test-only components
+------------------------------------------------------------------------
+   These are used solely for testing and are not distributed in the
+   released APK:
+
+   - JUnit 4 (junit:junit) — Eclipse Public License 2.0
+   - AndroidX Test (androidx.test.*) — Apache License 2.0

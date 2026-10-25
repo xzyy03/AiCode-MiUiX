@@ -1,0 +1,88 @@
+name: Sync Container Image Catalog
+
+on:
+  schedule:
+    # 每天 UTC 04:30 自动执行一次（避开 sync-models 的 04:00）
+    - cron: '30 4 * * *'
+  workflow_dispatch: # 支持在 Actions 界面手动触发
+
+permissions:
+  contents: write
+
+# 与 sync-models 共用同一 group：两者都写 data 分支，串行执行避免并发互相覆盖。
+concurrency:
+  group: sync-data-branch
+  cancel-in-progress: false
+
+jobs:
+  sync-container-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 抓取上游镜像版本并生成 data/container-images.json
+        run: |
+          python3 scripts/sync-container-images.py
+
+      - name: Publish to data branch
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          cp data/container-images.json "$RUNNER_TEMP/container-images.json"
+
+          # data 分支由多个同步任务共同写入（models.json / container-images.json），因此必须基于其
+          # 现有内容增量重建、只覆盖本次负责的文件。关键：**远端已有 data 分支时，取不到就中止发布**，
+          # 绝不能退化成空树快照——那会把别的任务刚发布的文件删掉。只有远端确实还没有该分支时才从空树创建。
+          set +e
+          git ls-remote --exit-code --heads origin data > /dev/null 2>&1
+          ls_remote_code=$?
+          set -e
+          case "$ls_remote_code" in
+            0) base_tree="origin/data" ;;
+            2) base_tree=""; echo "远端尚无 data 分支，将首次创建" ;;
+            *) echo "无法确认 data 分支状态（git ls-remote 退出码 $ls_remote_code），中止发布以免覆盖其它数据文件"; exit 1 ;;
+          esac
+
+          if [ -n "$base_tree" ]; then
+            git fetch origin data
+            # 与远端现存文件比对，无变化则跳过（避免无意义提交）
+            if git show origin/data:data/container-images.json > "$RUNNER_TEMP/container-images.old.json" 2>/dev/null \
+               && cmp -s "$RUNNER_TEMP/container-images.old.json" data/container-images.json; then
+              echo "镜像目录无变动，跳过提交"
+              exit 0
+            fi
+          fi
+
+          # 仍以「单个无父提交」发布，保持 data 分支只有最新快照、不累积历史。
+          # 用带随机后缀的临时分支名：checkout --orphan 遇到同名分支会直接 fatal，
+          # 固定名字会让重跑或日后再合并两个同步任务时炸掉。
+          snapshot_branch="data-snapshot-$$-$RANDOM"
+          git checkout --orphan "$snapshot_branch"
+          if [ -n "$base_tree" ]; then
+            git read-tree "$base_tree"
+          else
+            git read-tree --empty
+          fi
+          mkdir -p data
+          cp "$RUNNER_TEMP/container-images.json" data/container-images.json
+          git add -f data/container-images.json
+
+          # 让 Vercel 在这条孤立分支上也能读到 docs-site/vercel.json（其中 git.deploymentEnabled=false）。
+          # Vercel 的 Root Directory 是 docs-site，配置只从**被推送的那条分支**上读；isolated 的 data 分支
+          # 原本没有任何 vercel.json，于是退回默认「启用自动部署」，每次定时同步就产生一次秒失败的
+          # Preview 部署与失败通知（见 vercel/vercel#11176：vercel.json 必须存在于该分支才生效）。
+          if [ -f docs-site/vercel.json ]; then
+            git add -f docs-site/vercel.json
+          fi
+
+          git commit -q -m "chore(data): 同步容器镜像目录"
+          git push -f origin HEAD:data

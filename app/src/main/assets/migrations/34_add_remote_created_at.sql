@@ -1,0 +1,2 @@
+ALTER TABLE remote_connections ADD COLUMN created_at INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE remote_mounts ADD COLUMN created_at INTEGER NOT NULL DEFAULT 0;

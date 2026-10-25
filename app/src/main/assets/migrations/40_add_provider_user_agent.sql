@@ -1,0 +1,1 @@
+ALTER TABLE ai_providers ADD COLUMN userAgent TEXT NOT NULL DEFAULT '';

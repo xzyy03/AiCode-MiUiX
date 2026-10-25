@@ -1,0 +1,1 @@
+ALTER TABLE llm_call_records ADD COLUMN reasoningEffort TEXT;

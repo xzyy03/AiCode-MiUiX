@@ -1,0 +1,85 @@
+name: 🐛 Bug 报告
+description: 报告 App 使用中遇到的问题
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！请尽量填写完整，信息越全问题越快定位。
+        提交前请先搜索 [已有 issue](../../issues?q=is%3Aissue+)，避免重复。
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 简要说明遇到了什么问题。
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现步骤
+      description: 如何触发这个问题？例如：1. 打开设置 → 2. 点击 AI 提供商 → 3. ……
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为与实际行为
+      description: 你期望发生什么，实际发生了什么。
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: App 版本
+      description: 设置页可见，或「设置 → 关于」。形如 1.7.0 或 1.7.0-rc1。
+    validations:
+      required: true
+
+  - type: dropdown
+    id: terminal_mode
+    attributes:
+      label: 终端模式
+      options:
+        - 本地容器（PRoot）
+        - 远程 SSH
+        - 均可复现
+        - 不涉及终端
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: 设备与系统版本
+      placeholder: 例如 Pixel 8 / Android 15，或小米 14 / HyperOS 2
+    validations:
+      required: true
+
+  - type: input
+    id: provider_model
+    attributes:
+      label: AI 提供商与模型
+      description: 问题涉及 AI 对话时填写，例如 DeepSeek / deepseek-chat。不涉及可不填。
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志
+      description: |
+        日志位于 Android/data/<包名>/files/logs/。问题涉及崩溃或异常时请粘贴相关片段（注意脱敏 API Key）。
+        设置 → 日志 可直接查看。
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图 / 录屏
+      description: 有助于说明问题的图片或视频（拖拽上传，注意遮挡敏感信息）。

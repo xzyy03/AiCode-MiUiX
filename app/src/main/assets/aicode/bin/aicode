@@ -1,0 +1,7 @@
+#!/bin/sh
+# `aicode` 命令：打开容器环境脚本（provision.sh）的「环境安装」菜单，等价于 `provision.sh --env`。
+# 生产环境本文件在 ~/.aicode/bin/（provision.sh 在其上一级）；工作区草稿副本（aicode-env/bin/）结构相同，
+# 故按脚本自身所在目录定位即可两处通用。逻辑全在 provision.sh 与其公共库 lib/env-common.sh。
+SELF_DIR=$(dirname "$0")
+[ "${SELF_DIR#/}" = "$SELF_DIR" ] && SELF_DIR="$(pwd)/$SELF_DIR"
+exec sh "$SELF_DIR/../provision.sh" --env
