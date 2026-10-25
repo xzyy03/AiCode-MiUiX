@@ -33,6 +33,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -141,14 +143,12 @@ internal fun ChatHeader(
                         }
                     }
                 }
-                IconButton(onClick = onNewChat, modifier = Modifier.size(40.dp)) {
-                    Icon(
-                        FeatherIcons.Plus,
-                        contentDescription = stringResource(R.string.chat_new_session),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.size(22.dp)
-                    )
-                }
+                WorkbenchIconButton(
+                    icon = FeatherIcons.Plus,
+                    contentDescription = stringResource(R.string.chat_new_session),
+                    active = false,
+                    onClick = onNewChat
+                )
                 WorkbenchIconButton(
                     icon = FeatherIcons.GitBranch,
                     contentDescription = stringResource(R.string.chat_open_git),
@@ -190,30 +190,31 @@ private fun WorkbenchIconButton(
     active: Boolean,
     onClick: () -> Unit
 ) {
+    val isLight = MaterialTheme.colorScheme.background.luminance() > 0.5f
+    // 黑底圆角方块 + 白色字形（深色主题下用深灰块），三个顶栏动作按钮保持同一尺寸。
+    val fillColor = when {
+        active -> MaterialTheme.colorScheme.primary
+        isLight -> MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.surfaceContainerHighest
+    }
+    val iconColor = when {
+        active -> Color.White
+        isLight -> MaterialTheme.colorScheme.surface
+        else -> MaterialTheme.colorScheme.onSurface
+    }
     IconButton(onClick = onClick, modifier = Modifier.size(40.dp)) {
         Box(
             modifier = Modifier
                 .size(34.dp)
-                .then(
-                    if (active) {
-                        Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
-                    } else {
-                        Modifier
-                    }
-                ),
+                .clip(RoundedCornerShape(11.dp))
+                .background(fillColor),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 icon,
                 contentDescription = contentDescription,
-                tint = if (active) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.onSurface
-                },
-                modifier = Modifier.size(21.dp)
+                tint = iconColor,
+                modifier = Modifier.size(18.dp)
             )
         }
     }
