@@ -79,7 +79,6 @@ internal fun AboutSection(
     onCheckUpdate: () -> Unit
 ) {
     val context = LocalContext.current
-    var showChannelSheet by remember { mutableStateOf(false) }
     var showMirrorDialog by remember { mutableStateOf(false) }
     val termsUrl = stringResource(R.string.agreement_terms_url)
     val privacyUrl = stringResource(R.string.agreement_privacy_url)
@@ -141,26 +140,6 @@ internal fun AboutSection(
                 }
             )
             SettingsDivider()
-            // 更新通道
-            SettingsRow(
-                icon = FeatherIcons.Globe,
-                title = stringResource(R.string.about_update_channel),
-                onClick = { showChannelSheet = true },
-                trailing = {
-                    Text(
-                        text = stringResource(
-                            if (updateCheckChannel == UpdateChannel.STABLE) {
-                                R.string.update_channel_stable
-                            } else {
-                                R.string.update_channel_latest
-                            }
-                        ),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.semanticColors.subtleText
-                    )
-                }
-            )
-            SettingsDivider()
             // 下载镜像源：更新包下载走它加速，留空表示直连 GitHub
             SettingsRow(
                 icon = FeatherIcons.Download,
@@ -180,11 +159,18 @@ internal fun AboutSection(
                 }
             )
             SettingsDivider()
-            // GitHub 仓库
+            // GitHub 仓库：原上游项目
             SettingsRow(
                 icon = FeatherIcons.Github,
                 title = stringResource(R.string.about_github_repo),
                 onClick = { openUrl(context, GITHUB_REPO_URL) }
+            )
+            SettingsDivider()
+            // GitHub 仓库：本二改仓库
+            SettingsRow(
+                icon = FeatherIcons.Github,
+                title = stringResource(R.string.about_github_project_repo),
+                onClick = { openUrl(context, PROJECT_REPO_URL) }
             )
             SettingsDivider()
             // 许可证
@@ -206,17 +192,6 @@ internal fun AboutSection(
                 onClick = { openUrl(context, privacyUrl) }
             )
         }
-    }
-
-    if (showChannelSheet) {
-        UpdateChannelSheet(
-            current = updateCheckChannel,
-            onSelect = {
-                onSelectChannel(it)
-                showChannelSheet = false
-            },
-            onDismiss = { showChannelSheet = false }
-        )
     }
 
     if (showMirrorDialog) {
@@ -550,5 +525,6 @@ private fun loadAppIconBitmap(context: Context): ImageBitmap? {
 }
 
 private const val GITHUB_REPO_URL = "https://github.com/jieapi/aicode"
-private const val LICENSE_URL = "https://github.com/jieapi/aicode/blob/main/LICENSE"
+private const val PROJECT_REPO_URL = "https://github.com/xzyy03/AiCode-MiUiX"
+private const val LICENSE_URL = "https://github.com/xzyy03/AiCode-MiUiX/blob/main/LICENSE"
 private const val ICON_PX_DP = 48

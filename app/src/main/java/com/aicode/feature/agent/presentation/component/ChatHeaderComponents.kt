@@ -6,7 +6,6 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -21,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -37,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -49,15 +46,11 @@ import com.aicode.feature.onboarding.domain.OnboardingStep
 import com.aicode.feature.onboarding.presentation.onboardingTarget
 import com.aicode.feature.settings.presentation.component.ModelLogoIcon
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.Code
-import compose.icons.feathericons.Folder
 import compose.icons.feathericons.GitBranch
 import compose.icons.feathericons.Globe
 import compose.icons.feathericons.Menu
-import compose.icons.feathericons.Play
 import compose.icons.feathericons.Plus
 import compose.icons.feathericons.Terminal
-import compose.icons.feathericons.Zap
 
 @Composable
 internal fun ChatHeader(
@@ -306,13 +299,9 @@ internal fun RemoteConnectingPlaceholder(
 }
 
 @Composable
-internal fun WelcomeState(
-    bottomReserve: Dp,
-    modifier: Modifier = Modifier,
-    onPickSuggestion: (String) -> Unit = {}
-) {
+internal fun WelcomeState(bottomReserve: Dp, modifier: Modifier = Modifier) {
     BoxWithConstraints(
-        modifier = modifier.padding(horizontal = Spacing.xl),
+        modifier = modifier.padding(Spacing.xl),
         contentAlignment = Alignment.Center
     ) {
         val targetOffset = minOf(-(maxHeight * 0.13f), -(bottomReserve / 2))
@@ -323,104 +312,19 @@ internal fun WelcomeState(
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .offset(y = animatedOffset)
-                .widthIn(max = 460.dp)
-                .fillMaxWidth()
+            verticalArrangement = Arrangement.spacedBy(Spacing.sm),
+            modifier = Modifier.offset(y = animatedOffset)
         ) {
             Text(
                 text = stringResource(R.string.chat_placeholder),
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(Modifier.height(Spacing.sm))
             Text(
                 text = stringResource(R.string.chat_input_hint),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            Spacer(Modifier.height(28.dp))
-            // miuix 风快捷卡片：两列白卡 + 细边，点一下只是把提示词填进输入框，不隐式发送。
-            val suggestions = listOf(
-                SuggestionEntry(
-                    icon = FeatherIcons.Folder,
-                    label = stringResource(R.string.chat_suggestion_project),
-                    prompt = stringResource(R.string.chat_suggestion_project_prompt)
-                ),
-                SuggestionEntry(
-                    icon = FeatherIcons.Code,
-                    label = stringResource(R.string.chat_suggestion_explain),
-                    prompt = stringResource(R.string.chat_suggestion_explain_prompt)
-                ),
-                SuggestionEntry(
-                    icon = FeatherIcons.Zap,
-                    label = stringResource(R.string.chat_suggestion_fix),
-                    prompt = stringResource(R.string.chat_suggestion_fix_prompt)
-                ),
-                SuggestionEntry(
-                    icon = FeatherIcons.Play,
-                    label = stringResource(R.string.chat_suggestion_test),
-                    prompt = stringResource(R.string.chat_suggestion_test_prompt)
-                )
-            )
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                suggestions.chunked(2).forEach { rowItems ->
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        rowItems.forEach { entry ->
-                            SuggestionCard(
-                                entry = entry,
-                                modifier = Modifier.weight(1f),
-                                onClick = { onPickSuggestion(entry.prompt) }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-private data class SuggestionEntry(
-    val icon: ImageVector,
-    val label: String,
-    val prompt: String
-)
-
-@Composable
-private fun SuggestionCard(
-    entry: SuggestionEntry,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = modifier
-            .height(104.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Icon(
-                imageVector = entry.icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = entry.label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

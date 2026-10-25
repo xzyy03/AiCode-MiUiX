@@ -528,7 +528,8 @@
     <string name="agent_model_not_selected">Not selected</string>
     <!-- About -->
     <string name="about_version">Version</string>
-    <string name="about_github_repo">GitHub Repository</string>
+    <string name="about_github_repo">GitHub Repository (upstream)</string>
+    <string name="about_github_project_repo">This project on GitHub</string>
     <string name="about_license">Open Source License</string>
     <string name="about_description">Universal AI Coding Agent for Android · Linux dev environment · Local &amp; remote SSH</string>
     <string name="about_check_update">Check for updates</string>

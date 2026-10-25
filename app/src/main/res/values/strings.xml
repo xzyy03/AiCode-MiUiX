@@ -528,7 +528,8 @@
     <string name="agent_model_not_selected">未选择</string>
     <!-- About -->
     <string name="about_version">版本</string>
-    <string name="about_github_repo">GitHub 仓库</string>
+    <string name="about_github_repo">GitHub 仓库（上游）</string>
+    <string name="about_github_project_repo">GitHub 本项目仓库</string>
     <string name="about_license">开源许可证</string>
     <string name="about_description">Android 上的通用 AI Coding Agent · Linux 开发环境 · 支持本地与远程 SSH</string>
     <string name="about_check_update">检查更新</string>

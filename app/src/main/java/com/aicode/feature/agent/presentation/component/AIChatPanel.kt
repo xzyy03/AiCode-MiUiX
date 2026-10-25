@@ -1599,8 +1599,7 @@ fun AIChatPanel(
                 } else if (messages.isEmpty()) {
                     WelcomeState(
                         bottomReserve = with(LocalDensity.current) { inputBarReservePx.toDp() },
-                        modifier = Modifier.fillMaxSize(),
-                        onPickSuggestion = { viewModel.updateInputDraft(it) }
+                        modifier = Modifier.fillMaxSize()
                     )
                 } else {
                     LazyColumn(

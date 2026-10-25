@@ -162,7 +162,7 @@ class UpdateCheckService @Inject constructor(
         } ?: emptyList()
 
     private companion object {
-        const val GITHUB_RELEASES_API = "https://api.github.com/repos/jieapi/aicode/releases"
+        const val GITHUB_RELEASES_API = "https://api.github.com/repos/xzyy03/AiCode-MiUiX/releases"
         const val SHA256_PREFIX = "sha256:"
         val SHARED_CLIENT by lazy {
             okhttp3.OkHttpClient.Builder()
