@@ -103,6 +103,7 @@ class BackupViewModel @Inject constructor(
             .putBoolean(KEY_MCP_SERVERS, options.mcpServers)
             .putBoolean(KEY_PERMISSION_RULES, options.permissionRules)
             .putBoolean(KEY_APP_SETTINGS, options.appSettings)
+            .putBoolean(KEY_MEMORIES, options.memories)
             .putBoolean(KEY_WORKSPACE_FILES, options.workspaceFiles)
             .apply()
     }
@@ -114,6 +115,7 @@ class BackupViewModel @Inject constructor(
         mcpServers = prefs.getBoolean(KEY_MCP_SERVERS, true),
         permissionRules = prefs.getBoolean(KEY_PERMISSION_RULES, true),
         appSettings = prefs.getBoolean(KEY_APP_SETTINGS, true),
+        memories = prefs.getBoolean(KEY_MEMORIES, true),
         workspaceFiles = prefs.getBoolean(KEY_WORKSPACE_FILES, false)
     )
 
@@ -441,6 +443,7 @@ class BackupViewModel @Inject constructor(
         private const val KEY_MCP_SERVERS = "mcp_servers"
         private const val KEY_PERMISSION_RULES = "permission_rules"
         private const val KEY_APP_SETTINGS = "app_settings"
+        private const val KEY_MEMORIES = "memories"
         private const val KEY_WORKSPACE_FILES = "workspace_files"
     }
 }

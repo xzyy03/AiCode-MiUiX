@@ -524,6 +524,16 @@ private fun LocalBackupTab(
             )
             SettingsDivider()
             SettingsRow(
+                title = stringResource(R.string.backup_data_memory),
+                trailing = {
+                    AppSwitch(
+                        checked = exportOptions.memories,
+                        onCheckedChange = { onUpdateOptions(exportOptions.copy(memories = it)) }
+                    )
+                }
+            )
+            SettingsDivider()
+            SettingsRow(
                 title = stringResource(R.string.backup_data_workspace),
                 trailing = {
                     AppSwitch(
@@ -924,6 +934,7 @@ private fun buildImportSummary(context: android.content.Context, stats: RestoreS
     if (stats.todoItems > 0) appendLine(context.getString(R.string.backup_stat_todo_items, stats.todoItems))
     if (stats.mcpServers > 0) appendLine(context.getString(R.string.backup_stat_mcp_servers, stats.mcpServers))
     if (stats.globalPermissionRules > 0) appendLine(context.getString(R.string.backup_stat_permission_rules, stats.globalPermissionRules))
+    if (stats.memories > 0) appendLine(context.getString(R.string.backup_stat_memories, stats.memories))
     if (stats.workspaceFiles > 0) appendLine(context.getString(R.string.backup_stat_workspace_files, stats.workspaceFiles))
     append(context.getString(R.string.backup_settings_covered))
 }

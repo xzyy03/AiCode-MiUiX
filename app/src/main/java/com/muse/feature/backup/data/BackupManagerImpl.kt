@@ -11,6 +11,7 @@ import com.muse.feature.agent.data.local.database.AgentDatabase
 import com.muse.feature.agent.data.local.entity.AgentMessageEntity
 import com.muse.feature.agent.data.local.entity.ChatSessionEntity
 import com.muse.feature.agent.data.local.entity.TodoItemEntity
+import com.muse.feature.agent.domain.container.ContainerInstaller
 import com.muse.feature.agent.domain.mcp.McpConfigRepository
 import com.muse.feature.agent.domain.mcp.McpManager
 import com.muse.feature.agent.domain.permission.PermissionRulesRepository
@@ -94,7 +95,8 @@ class BackupManagerImpl @Inject constructor(
     private val visionModelSettingsRepository: VisionModelSettingsRepository,
     private val compactionModelSettingsRepository: CompactionModelSettingsRepository,
     private val syncSettingsRepository: SyncSettingsRepository,
-    private val workspaceRepository: WorkspaceRepository
+    private val workspaceRepository: WorkspaceRepository,
+    private val containerInstaller: ContainerInstaller
 ) : BackupManager {
 
     private val json = Json {
@@ -296,6 +298,9 @@ class BackupManagerImpl @Inject constructor(
                 TarArchiveOutputStream(gz).use { tar ->
                     tar.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU)
                     writeMetadataEntry(tar, buildMetadata(options))
+                    if (options.memories) {
+                        writeMemoryEntries(tar)
+                    }
                     if (options.workspaceFiles) {
                         writeWorkspaceEntries(tar)
                     }
@@ -527,7 +532,9 @@ class BackupManagerImpl @Inject constructor(
                     stats += RestoreStats(todoItems = count)
                 }
                 else -> {
-                    if (entry.name.startsWith(WORKSPACE_PREFIX)) {
+                    if (entry.name.startsWith(MEMORY_PREFIX)) {
+                        stats += restoreMemoryEntry(tar, entry.name)
+                    } else if (entry.name.startsWith(WORKSPACE_PREFIX)) {
                         stats += restoreWorkspaceEntry(tar, entry.name, selectedWorkspaces, restoreMapping)
                     }
                 }
@@ -884,6 +891,28 @@ class BackupManagerImpl @Inject constructor(
     private fun TodoItemEntity.toDto() = TodoItemDto(id, sessionId, subject, description, status, priority, order, createdAt, updatedAt)
     private fun TodoItemDto.toEntity() = TodoItemEntity(id, sessionId, subject, description, status, priority, order, createdAt, updatedAt)
 
+    /** 记忆目录（全局记忆 + 项目级记忆缓存）按相对路径写入 tar，导入时原样写回。 */
+    private fun writeMemoryEntries(tar: TarArchiveOutputStream) {
+        val root = File(containerInstaller.museDir, "memory")
+        if (!root.isDirectory) return
+        root.walkTopDown()
+            .filter { it.isFile && it.extension.equals("md", ignoreCase = true) }
+            .forEach { file ->
+                val rel = file.relativeTo(root).invariantSeparatorsPath
+                writeTarEntry(tar, MEMORY_PREFIX + rel, file.readBytes())
+            }
+    }
+
+    private fun restoreMemoryEntry(tar: TarArchiveInputStream, entryName: String): RestoreStats {
+        val rel = entryName.removePrefix(MEMORY_PREFIX)
+        if (rel.isBlank() || rel.split('/').any { it == ".." }) return RestoreStats()
+        val root = File(containerInstaller.museDir, "memory")
+        val dest = File(root, rel)
+        dest.parentFile?.mkdirs()
+        dest.writeBytes(tar.readBytes())
+        return RestoreStats(memories = 1)
+    }
+
     private companion object {
         const val TAG = "BackupManager"
         const val PAGE_SIZE = 500
@@ -893,6 +922,7 @@ class BackupManagerImpl @Inject constructor(
         const val FILE_TODOS = "todoItems.jsonl"
         const val FILE_LEGACY_SNAPSHOT = "snapshot.json"
         const val WORKSPACE_PREFIX = "workspaces/"
+        const val MEMORY_PREFIX = "memories/"
     }
 }
 

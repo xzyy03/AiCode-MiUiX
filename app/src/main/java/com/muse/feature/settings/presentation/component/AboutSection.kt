@@ -1,9 +1,12 @@
 package com.muse.feature.settings.presentation.component
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -59,6 +62,7 @@ import compose.icons.feathericons.Check
 import compose.icons.feathericons.Download
 import compose.icons.feathericons.Github
 import compose.icons.feathericons.Globe
+import compose.icons.feathericons.MessageCircle
 import compose.icons.feathericons.RefreshCw
 import compose.icons.feathericons.Tag
 
@@ -121,6 +125,24 @@ internal fun AboutSection(
                 trailing = {
                     Text(
                         text = "v${appInfo.name}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.semanticColors.subtleText
+                    )
+                }
+            )
+            SettingsDivider()
+            // 交流群：点击复制群号
+            SettingsRow(
+                icon = FeatherIcons.MessageCircle,
+                title = stringResource(R.string.about_community),
+                onClick = {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    clipboard.setPrimaryClip(ClipData.newPlainText("Muse 交流群", "1125470056"))
+                    Toast.makeText(context, R.string.about_community_copied, Toast.LENGTH_SHORT).show()
+                },
+                trailing = {
+                    Text(
+                        text = "1125470056",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.semanticColors.subtleText
                     )

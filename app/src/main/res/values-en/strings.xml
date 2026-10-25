@@ -556,6 +556,8 @@
     <string name="agent_model_not_selected">Not selected</string>
     <!-- About -->
     <string name="about_version">Version</string>
+    <string name="about_community">Community Group</string>
+    <string name="about_community_copied">Group number copied</string>
     <string name="about_github_repo">GitHub Repository (upstream)</string>
     <string name="about_github_project_repo">This project on GitHub</string>
     <string name="about_license">Open Source License</string>
@@ -645,6 +647,7 @@
     <string name="backup_data_mcp">MCP Servers</string>
     <string name="backup_data_permissions">Permission Rules</string>
     <string name="backup_data_app_settings">App Settings</string>
+    <string name="backup_data_memory">Memories</string>
     <string name="backup_data_workspace">Workspace Files</string>
     <string name="backup_workspace_git_hint">Workspace files are best backed up via Git; the export here is only a fallback</string>
     <string name="backup_password_label">Password (optional)</string>
@@ -660,6 +663,7 @@
     <string name="backup_stat_mcp_servers">· MCP Servers: %1$s</string>
     <string name="backup_stat_permission_rules">· Global Permission Rules: %1$s</string>
     <string name="backup_stat_workspace_files">· Workspace Files: %1$s</string>
+    <string name="backup_stat_memories">· Memories: %1$s</string>
     <string name="backup_settings_covered">Theme, keepalive, logging, vision, and sync preferences covered</string>
     <string name="backup_restore_workspaces_title">Restore workspaces</string>
     <string name="backup_restore_workspaces_warning">Files in local workspaces with the same name will be overwritten and cannot be undone. Select carefully.</string>
