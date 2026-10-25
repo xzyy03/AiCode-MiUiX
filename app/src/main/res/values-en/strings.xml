@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AiCode</string>
+    <string name="app_name">Muse</string>
     <string name="common_tool_missing_argument">Missing parameter: %1$s.</string>
     <string name="plan_mode_invalid_action">Invalid action: %1$s. Supported values: enter or exit.</string>
     <string name="plan_mode_already_active">Already in PLAN mode.</string>
@@ -200,7 +200,7 @@
     <!-- Storage page -->
     <string name="settings_storage">Storage</string>
     <string name="storage_refresh">Rescan</string>
-    <string name="storage_total_title">Used by AiCode</string>
+    <string name="storage_total_title">Used by Muse</string>
     <string name="storage_scanning">Calculating…</string>
     <string name="storage_device_free">%1$s free of %2$s</string>
     <string name="storage_section_breakdown">Breakdown</string>
@@ -429,7 +429,7 @@
     <string name="credential_auto_inject_title">Auto-inject credentials</string>
     <string name="credential_auto_inject_hint">Sync git credentials saved in the app to this remote server, effective only for repositories under the current workspace root. Does not affect your manual git usage on the server.</string>
     <string name="credential_auto_inject_prompt_title">Auto-inject git credentials?</string>
-    <string name="credential_auto_inject_prompt_body">Allow AiCode to sync git credentials saved in the app to this remote server? It only applies to repositories under the current workspace root and will not modify the server\'s global git config.</string>
+    <string name="credential_auto_inject_prompt_body">Allow Muse to sync git credentials saved in the app to this remote server? It only applies to repositories under the current workspace root and will not modify the server\'s global git config.</string>
     <string name="credential_auto_inject_enable">Enable</string>
     <string name="common_rename">Rename</string>
     <string name="common_hide">Hide</string>
@@ -575,10 +575,10 @@
     <string name="about_update_verify_not_newer">Package version is not newer than the installed one</string>
     <string name="about_update_install_failed">No app available to install packages</string>
 
-    <string name="agreement_title">Welcome to AiCode</string>
+    <string name="agreement_title">Welcome to Muse</string>
     <string name="agreement_terms">User Agreement</string>
     <string name="agreement_privacy">Privacy Policy</string>
-    <string name="agreement_notice_prefix">"Before using AiCode, please read and agree to the "</string>
+    <string name="agreement_notice_prefix">"Before using Muse, please read and agree to the "</string>
     <string name="agreement_terms_link">User Agreement</string>
     <string name="agreement_notice_conjunction">" and "</string>
     <string name="agreement_privacy_link">Privacy Policy</string>
@@ -770,7 +770,7 @@
     <string name="editor_binary_unsupported">Binary file, opening not supported</string>
 
     <!-- Chat Input Bar -->
-    <string name="chat_input_placeholder">Ask AiCode to do it</string>
+    <string name="chat_input_placeholder">Ask Muse to do it</string>
     <string name="chat_queue_hint">AI is busy, press enter to queue the message</string>
     <string name="chat_input_expand">Expand input box</string>
     <string name="chat_mention_loading">Loading files…</string>
@@ -979,7 +979,7 @@
     <!-- Credential List -->
     <string name="credential_empty_hint">No credentials yet, tap + to add</string>
     <string name="credential_empty_title">No Git Credentials</string>
-    <string name="credential_empty_desc">Tap + in the top right to sign in with GitHub or add an access token. AiCode then authenticates pushes and pulls automatically</string>
+    <string name="credential_empty_desc">Tap + in the top right to sign in with GitHub or add an access token. Muse then authenticates pushes and pulls automatically</string>
 
     <!-- Credential Add / Quick Login -->
     <string name="credential_add_sheet_title">Add Credential</string>
@@ -1012,7 +1012,7 @@
     <string name="credential_device_waiting_desc">Credentials will be bound and saved automatically once authorized</string>
     <string name="credential_device_success_title">Authorization Successful</string>
     <string name="credential_device_success">Signed in as %1$s and credential saved</string>
-    <string name="credential_device_install_required">Signed in as %1$s. You still need to install AiCode on your repositories before pushing/pulling code.</string>
+    <string name="credential_device_install_required">Signed in as %1$s. You still need to install Muse on your repositories before pushing/pulling code.</string>
     <string name="credential_device_install_now">Install</string>
     <string name="credential_device_install_later">Later</string>
     <string name="credential_device_failed_title">Authorization Incomplete</string>
@@ -1837,7 +1837,7 @@
     <string name="crash_restart">Restart app</string>
     <string name="crash_exit">Exit app</string>
     <string name="crash_log_hint">Full log files at: %1$s</string>
-    <string name="crash_report_title">AiCode Crash Report</string>
+    <string name="crash_report_title">Muse Crash Report</string>
     <string name="crash_report_time">Time: %1$s</string>
     <string name="crash_report_version">Version: %1$s</string>
     <string name="crash_report_device">Device: %1$s</string>

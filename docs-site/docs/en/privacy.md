@@ -1,19 +1,19 @@
 ---
 title: Privacy Policy
-description: Privacy Policy for AiCode, an Android AI coding tool. Learn how local data, third-party services, network requests, logs, and backups are handled.
+description: Privacy Policy for Muse, an Android AI coding tool. Learn how local data, third-party services, network requests, logs, and backups are handled.
 ---
 
-# AiCode Privacy Policy
+# Muse Privacy Policy
 
 **Last updated: October 23, 2026**
 
-AiCode ("the App") is an open-source AI coding tool for Android, licensed under GPL-3.0. This policy explains how the App handles your information.
+Muse ("the App") is an open-source AI coding tool for Android, licensed under GPL-3.0. This policy explains how the App handles your information.
 
 **The developer does not use a developer-operated application backend to collect or centrally store your chats, workspace files, or credentials, and does not sell this data.** The App primarily stores settings and sessions on your device, but this does not mean all data is processed only locally: AI, web search, remote server, and remote backup features send relevant content to the respective services. The App also makes network requests for updates and public configuration data.
 
 ## 1. Accounts and Information Collection
 
-- The App **has no AiCode account system** and does not require an AiCode account. Third-party integrations such as GitHub may require sign-in or authorization with those services and store authorization credentials on your device.
+- The App **has no Muse account system** and does not require an Muse account. Third-party integrations such as GitHub may require sign-in or authorization with those services and store authorization credentials on your device.
 - The App ships with **no analytics, tracking, advertising, or crash-reporting SDKs**. It does not automatically upload your activity records, chat content, or logs for usage analytics or advertising.
 - The App records runtime and crash diagnostics locally, as described in Section 2. Local recording does not mean automatic uploading.
 - The developer does not remotely read your device data through the App. If you submit an issue, copy crash information, or share logs, that content is provided to your chosen recipient. Review it and remove sensitive information first.

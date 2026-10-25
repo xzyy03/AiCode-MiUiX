@@ -1,6 +1,6 @@
 # Shizuku 工具
 
-Shizuku 让普通应用可以执行系统命令。AiCode 接入后，AI 获得一个名为 `Shizuku` 的工具，可通过它在手机系统上运行 `pm`、`am`、`cmd` 等命令，弥补本地容器（PRoot）拿不到系统权限的短板。
+Shizuku 让普通应用可以执行系统命令。Muse 接入后，AI 获得一个名为 `Shizuku` 的工具，可通过它在手机系统上运行 `pm`、`am`、`cmd` 等命令，弥补本地容器（PRoot）拿不到系统权限的短板。
 
 ## 前置：安装并启动 Shizuku
 
@@ -9,7 +9,7 @@ Shizuku 让普通应用可以执行系统命令。AiCode 接入后，AI 获得�
    - Android 11 及以上：开启「无线调试」后可直接在手机上启动；
    - Android 10 及以下：需连接电脑用 adb 启动。
 
-## 在 AiCode 中授权
+## 在 Muse 中授权
 
 打开「设置 → 软件权限 → Shizuku」，页面显示当前状态：
 
@@ -18,7 +18,7 @@ Shizuku 让普通应用可以执行系统命令。AiCode 接入后，AI 获得�
 - **未授权**：点击申请授权，Shizuku 弹出授权框，选择「允许」。
 - **已就绪**：授权完成，AI 即可使用 `Shizuku` 工具。
 
-从 Shizuku 应用返回 AiCode 时，状态会自动刷新。
+从 Shizuku 应用返回 Muse 时，状态会自动刷新。
 
 ## 使用与安全
 

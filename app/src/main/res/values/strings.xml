@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AiCode</string>
+    <string name="app_name">Muse</string>
     <string name="common_tool_missing_argument">缺少参数：%1$s。</string>
     <string name="plan_mode_invalid_action">无效的 action：%1$s。支持 enter 或 exit。</string>
     <string name="plan_mode_already_active">当前已处于 PLAN（计划）模式。</string>
@@ -429,7 +429,7 @@
     <string name="credential_auto_inject_title">自动注入凭证</string>
     <string name="credential_auto_inject_hint">把应用中保存的 git 凭据同步到远程服务器，仅对当前工作区根目录下的仓库生效，不影响你在服务器上手动使用 git</string>
     <string name="credential_auto_inject_prompt_title">自动注入 git 凭证？</string>
-    <string name="credential_auto_inject_prompt_body">是否让 AiCode 把应用中保存的 git 凭据同步到该远程服务器？仅对当前工作区根目录下的仓库生效，不会改动服务器的全局 git 配置。</string>
+    <string name="credential_auto_inject_prompt_body">是否让 Muse 把应用中保存的 git 凭据同步到该远程服务器？仅对当前工作区根目录下的仓库生效，不会改动服务器的全局 git 配置。</string>
     <string name="credential_auto_inject_enable">开启</string>
     <string name="common_rename">重命名</string>
     <string name="common_hide">隐藏</string>
@@ -575,7 +575,7 @@
     <string name="about_update_verify_not_newer">安装包版本不高于当前版本</string>
     <string name="about_update_install_failed">没有可用的安装程序</string>
 
-    <string name="agreement_title">欢迎使用 AiCode</string>
+    <string name="agreement_title">欢迎使用 Muse</string>
     <string name="agreement_terms">用户协议</string>
     <string name="agreement_privacy">隐私政策</string>
     <string name="agreement_notice_prefix">使用前，请阅读并同意</string>
@@ -770,7 +770,7 @@
     <string name="chat_export_session_failed">导出失败</string>
 
     <!-- Chat Input Bar -->
-    <string name="chat_input_placeholder">交给 AiCode 去完成</string>
+    <string name="chat_input_placeholder">交给 Muse 去完成</string>
     <string name="chat_queue_hint">AI 正在处理中，回车发送将自动排队</string>
     <string name="chat_input_expand">展开输入框</string>
     <string name="chat_mention_loading">正在加载文件列表…</string>
@@ -1012,7 +1012,7 @@
     <string name="credential_device_waiting_desc">完成授权后将自动绑定并保存凭据</string>
     <string name="credential_device_success_title">授权成功</string>
     <string name="credential_device_success">已成功关联账号 %1$s 并保存凭据</string>
-    <string name="credential_device_install_required">已登录为 %1$s。还需把 AiCode 安装到你的仓库，之后才能推送/拉取代码。</string>
+    <string name="credential_device_install_required">已登录为 %1$s。还需把 Muse 安装到你的仓库，之后才能推送/拉取代码。</string>
     <string name="credential_device_install_now">去安装</string>
     <string name="credential_device_install_later">稍后</string>
     <string name="credential_device_failed_title">授权未能完成</string>
@@ -1836,7 +1836,7 @@
     <string name="crash_restart">重启应用</string>
     <string name="crash_exit">退出应用</string>
     <string name="crash_log_hint">完整日志文件位置：%1$s</string>
-    <string name="crash_report_title">AiCode 崩溃报告</string>
+    <string name="crash_report_title">Muse 崩溃报告</string>
     <string name="crash_report_time">时间：%1$s</string>
     <string name="crash_report_version">版本：%1$s</string>
     <string name="crash_report_device">设备：%1$s</string>

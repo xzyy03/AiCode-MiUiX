@@ -1,6 +1,6 @@
 # 在容器中编译 Flutter 应用
 
-在 AiCode 的 Linux 容器（PRoot）中配置 JDK、Android SDK 与 Flutter SDK 后，即可直接从源码编译 Flutter 应用的 Android APK。本文以 Debian 12 (bookworm) aarch64 为例，已在 PRoot 容器内实测通过 debug APK 的构建。
+在 Muse 的 Linux 容器（PRoot）中配置 JDK、Android SDK 与 Flutter SDK 后，即可直接从源码编译 Flutter 应用的 Android APK。本文以 Debian 12 (bookworm) aarch64 为例，已在 PRoot 容器内实测通过 debug APK 的构建。
 
 ::: tip 支持范围
 本文构建 **debug APK**（JIT 模式，原生支持 ARM64）。**release 包**需要额外用 qemu 转译补齐 AOT 编译器，见《在容器中构建 Flutter release APK》。

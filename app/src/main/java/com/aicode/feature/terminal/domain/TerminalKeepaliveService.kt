@@ -160,10 +160,10 @@ class TerminalKeepaliveService : Service() {
             if (!wifiLocksInitialized) {
                 val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager ?: return
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    wifiLocks += wm.createWifiLock(WifiManager.WIFI_MODE_FULL_LOW_LATENCY, "AiCode:Keepalive:low-latency")
+                    wifiLocks += wm.createWifiLock(WifiManager.WIFI_MODE_FULL_LOW_LATENCY, "Muse:Keepalive:low-latency")
                 }
                 @Suppress("DEPRECATION")
-                wifiLocks += wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "AiCode:Keepalive")
+                wifiLocks += wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "Muse:Keepalive")
                 wifiLocks.forEach { it.setReferenceCounted(false) }
                 wifiLocksInitialized = true
             }

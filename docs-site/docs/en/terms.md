@@ -1,13 +1,13 @@
 ---
 title: User Agreement
-description: AiCode User Agreement covering consent, AI and operational risks, lawful use, third-party services and fees, backups, open-source rights, and liability limits.
+description: Muse User Agreement covering consent, AI and operational risks, lawful use, third-party services and fees, backups, open-source rights, and liability limits.
 ---
 
-# AiCode User Agreement
+# Muse User Agreement
 
 **Last updated: October 23, 2026**
 
-AiCode ("the App") is an open-source AI coding tool for Android maintained by jieapi (an individual developer, "the Developer"). This agreement explains your rights, obligations, and important risks when using the App. Please read it together with the [Privacy Policy](/en/privacy).
+Muse ("the App") is an open-source AI coding tool for Android maintained by jieapi (an individual developer, "the Developer"). This agreement explains your rights, obligations, and important risks when using the App. Please read it together with the [Privacy Policy](/en/privacy).
 
 ## 1. Reading and Consent
 

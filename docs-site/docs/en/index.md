@@ -1,20 +1,20 @@
 ---
 layout: home
-title: AiCode - AI Coding Tool & Linux Terminal on Android
+title: Muse - AI Coding Tool & Linux Terminal on Android
 titleTemplate: false
-description: AiCode is an open-source AI coding tool for Android that needs no computer. It ships a built-in Linux container and terminal so the AI Agent can read/write code and run builds on its own, with Git version control, the MCP protocol and remote SSH support.
+description: Muse is an open-source AI coding tool for Android that needs no computer. It ships a built-in Linux container and terminal so the AI Agent can read/write code and run builds on its own, with Git version control, the MCP protocol and remote SSH support.
 head:
   - - meta
     - name: keywords
-      content: AiCode, Android AI coding, mobile development, Linux terminal, PRoot, Termux, AI Agent, MCP, code editor, Git client, mobile workstation, remote SSH
+      content: Muse, Android AI coding, mobile development, Linux terminal, PRoot, Termux, AI Agent, MCP, code editor, Git client, mobile workstation, remote SSH
 
 hero:
-  name: AiCode
+  name: Muse
   text: AI Coding Tool & Mobile Workstation on Your Phone
   tagline: No computer needed — write, debug and commit entirely from your phone. A built-in Linux container and terminal let the AI Agent read/write files, run shell commands and execute builds on its own, with Git, MCP, remote SSH and a full model ecosystem.
   image:
     src: /logo.png
-    alt: AiCode
+    alt: Muse
   actions:
     - theme: brand
       text: Quick Start

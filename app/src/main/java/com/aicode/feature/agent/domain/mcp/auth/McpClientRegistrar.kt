@@ -77,7 +77,7 @@ class McpClientRegistrar @Inject constructor(
         scopesSupported: List<String>
     ): OAuthClientRegistration = withContext(Dispatchers.IO) {
         val payload = buildJsonObject {
-            put("client_name", "AiCode")
+            put("client_name", "Muse")
             putJsonArray("redirect_uris") { add(redirectUri) }
             putJsonArray("grant_types") { add("authorization_code"); add("refresh_token") }
             putJsonArray("response_types") { add("code") }

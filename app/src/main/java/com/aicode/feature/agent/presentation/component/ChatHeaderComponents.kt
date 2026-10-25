@@ -33,8 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -190,33 +188,13 @@ private fun WorkbenchIconButton(
     active: Boolean,
     onClick: () -> Unit
 ) {
-    val isLight = MaterialTheme.colorScheme.background.luminance() > 0.5f
-    // 黑底圆角方块 + 白色字形（深色主题下用深灰块），三个顶栏动作按钮保持同一尺寸。
-    val fillColor = when {
-        active -> MaterialTheme.colorScheme.primary
-        isLight -> MaterialTheme.colorScheme.onSurface
-        else -> MaterialTheme.colorScheme.surfaceContainerHighest
-    }
-    val iconColor = when {
-        active -> Color.White
-        isLight -> MaterialTheme.colorScheme.surface
-        else -> MaterialTheme.colorScheme.onSurface
-    }
-    IconButton(onClick = onClick, modifier = Modifier.size(40.dp)) {
-        Box(
-            modifier = Modifier
-                .size(34.dp)
-                .clip(RoundedCornerShape(11.dp))
-                .background(fillColor),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                icon,
-                contentDescription = contentDescription,
-                tint = iconColor,
-                modifier = Modifier.size(18.dp)
-            )
-        }
+    IconButton(onClick = onClick, modifier = Modifier.size(36.dp)) {
+        Icon(
+            icon,
+            contentDescription = contentDescription,
+            tint = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(20.dp)
+        )
     }
 }
 

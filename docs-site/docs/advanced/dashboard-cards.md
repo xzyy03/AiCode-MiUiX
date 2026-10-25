@@ -1,6 +1,6 @@
 # 自定义面板 (DIY Dashboard) 与 Adaptive Cards 设计规范指南
 
-本文档定义了 AiCode 在聊天输入框上方「自定义面板 (DIY Dashboard)」中支持的 **Adaptive Cards 声明式微模板规范**。
+本文档定义了 Muse 在聊天输入框上方「自定义面板 (DIY Dashboard)」中支持的 **Adaptive Cards 声明式微模板规范**。
 
 AI 助手与开发者可以依据此规范，编写面板脚本（Python / Node / Shell）输出结构化卡片 JSON，从而完全自定义面板在收起态（Compact）与展开态（Expanded）下的排版、配色、进度条、指标卡片及明细信息。
 
@@ -31,7 +31,7 @@ AI 助手与开发者可以依据此规范，编写面板脚本（Python / Node 
 
 ## 2. 脚本运行环境与注入的环境变量
 
-执行面板脚本时，AiCode 会自动注入以下环境变量，供脚本自由消费并构建动态面板：
+执行面板脚本时，Muse 会自动注入以下环境变量，供脚本自由消费并构建动态面板：
 
 ### Token 类变量
 
