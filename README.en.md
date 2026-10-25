@@ -1,21 +1,21 @@
 <p align="center">
-  <img src="docs/icon.webp" width="112" alt="AiCode" />
-  <h1 align="center">AiCode MiUiX</h1>
+  <img src="docs/icon.webp" width="112" alt="Muse" />
+  <h1 align="center">Muse</h1>
   <p align="center">
-    A miuix / HyperOS style UI fork of AiCode, based on jieapi/AiCode
+    A miuix / HyperOS style UI fork of AiCode, based on jieapi/aicode
     <br />
     <a href="README.md">中文</a> · <a href="README.en.md">English</a>
   </p>
 </p>
 
 > [!IMPORTANT]
-> **This repository is an unofficial UI fork of AiCode, released under GPL-3.0.**
+> **This repository is Muse, an unofficial UI fork of AiCode, released under GPL-3.0.**
 >
 > - **Original author**: [jieapi](https://github.com/jieapi) (author of AiCode)
-> - **Upstream repository**: [github.com/jieapi/AiCode](https://github.com/jieapi/AiCode)
-> - **This repository**: [github.com/xzyy03/AiCode-MiUiX](https://github.com/xzyy03/AiCode-MiUiX)
+> - **Upstream repository**: [github.com/jieapi/aicode](https://github.com/jieapi/aicode)
+> - **This repository**: [github.com/xzyy03/Muse](https://github.com/xzyy03/Muse)
 > - **License**: [GPL-3.0](LICENSE), same as upstream; this fork is open source as well
-> - **Scope of changes**: visual style only (miuix / HyperOS look), no business-logic changes
+> - **Scope of changes**: UI style, branding and package name (com.muse), plus the memory page and chat shortcuts; container images are added manually
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue.svg" alt="License GPL-3.0" /></a>
@@ -48,9 +48,9 @@
 
 ## Overview
 
-AiCode is a universal AI coding agent that runs on Android, packing a full Linux development environment into your phone: it bundles an Alpine Linux container and terminal, and the AI agent can read and write files, run shell commands and run build tools, so writing, debugging and building all happen on-device. A remote SSH server can also serve as the execution backend, turning your phone into a mobile workstation for remote projects.
+Muse is a universal AI coding agent that runs on Android, packing a full Linux development environment into your phone: it bundles a terminal, and the AI agent can read and write files, run shell commands and run build tools, so writing, debugging and building all happen on-device. A remote SSH server can also serve as the execution backend, turning your phone into a mobile workstation for remote projects.
 
-There is nothing to set up beforehand: install the app, configure a model under AI Vendors, and you can start coding — no computer, no environment to build yourself. AiCode ships no models and locks you into no vendor: it supports the OpenAI / Anthropic / Gemini protocols plus custom providers, with models, keys and endpoints all configured by you.
+There is nothing to set up beforehand: install the app and configure a model under AI Vendors. Container images are added or downloaded manually the first time. Muse ships no models and locks you into no vendor: it supports the OpenAI / Anthropic / Gemini protocols plus custom providers, with models, keys and endpoints all configured by you.
 
 ## Sponsors
 
@@ -113,7 +113,7 @@ There is nothing to set up beforehand: install the app, configure a model under 
 
 ## Star
 
-If AiCode is helpful to you, give it a [Star](https://github.com/jieapi/aicode) — it helps more developers discover the project.
+If Muse is helpful to you, give it a [Star](https://github.com/xzyy03/Muse).
 
 ## Star History
 
@@ -140,7 +140,7 @@ If AiCode is helpful to you, give it a [Star](https://github.com/jieapi/aicode) 
 
 ## Disclaimer
 
-AiCode is provided "as is", for learning, research and lawful software development only. Using it for any illegal or infringing purpose is strictly prohibited, including but not limited to unauthorized access to, cracking or reverse engineering of others' software or systems, circumventing technological protection measures, stealing or leaking others' data, or distributing malicious code.
+Muse is provided "as is", for learning, research and lawful software development only. Using it for any illegal or infringing purpose is strictly prohibited, including but not limited to unauthorized access to, cracking or reverse engineering of others' software or systems, circumventing technological protection measures, stealing or leaking others' data, or distributing malicious code.
 
 You bear all risks and responsibility for your use of this software. The authors and contributors shall not be liable for any loss arising from your use of, or inability to use, this software, nor for any act you perform using it or its consequences.
 

@@ -1,21 +1,21 @@
 <p align="center">
-  <img src="docs/icon.webp" width="112" alt="AiCode" />
-  <h1 align="center">AiCode MiUiX</h1>
+  <img src="docs/icon.webp" width="112" alt="Muse" />
+  <h1 align="center">Muse</h1>
   <p align="center">
-    AiCode 的 miuix / HyperOS 风格 UI 二改版 · 基于 jieapi/AiCode
+    基于 AiCode 的 miuix / HyperOS 风格 UI 二改版 · 上游 jieapi/aicode
     <br />
     <a href="README.md">中文</a> · <a href="README.en.md">English</a>
   </p>
 </p>
 
 > [!IMPORTANT]
-> **本仓库是 AiCode 的 UI 二改版本（非官方），遵循 GPL-3.0 开源。**
+> **本仓库是 Muse（基于 AiCode 的 UI 二改版，非官方），遵循 GPL-3.0 开源。**
 >
 > - **原作者**：[jieapi](https://github.com/jieapi)（AiCode 作者）
-> - **上游仓库**：[github.com/jieapi/AiCode](https://github.com/jieapi/AiCode)
-> - **本仓库**：[github.com/xzyy03/AiCode-MiUiX](https://github.com/xzyy03/AiCode-MiUiX)
+> - **上游仓库**：[github.com/jieapi/aicode](https://github.com/jieapi/aicode)
+> - **本仓库**：[github.com/xzyy03/Muse](https://github.com/xzyy03/Muse)
 > - **许可证**：[GPL-3.0](LICENSE)（与上游一致，二改同样开源）
-> - **改动范围**：仅界面样式（miuix / HyperOS 观感），不改业务逻辑；具体见下方「本仓库改动」
+> - **改动范围**：界面风格、品牌与包名（com.muse），以及记忆页、聊天快捷入口等体验改动；容器镜像改为手动添加
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue.svg" alt="License GPL-3.0" /></a>
@@ -48,13 +48,13 @@
 
 ## 简介
 
-AiCode 是运行在 Android 上的通用 AI Coding Agent，把一套完整的 Linux 开发环境装进手机：内置 Alpine Linux 容器与终端，AI Agent 能读写文件、执行 Shell 命令、运行构建工具，写代码、调试到构建都在手机本地完成；也可改用远程 SSH 服务器作为执行后端，把手机变成远程项目的移动工作站。
+Muse 是运行在 Android 上的通用 AI Coding Agent，把一套完整的 Linux 开发环境装进手机：内置终端，AI Agent 能读写文件、执行 Shell 命令、运行构建工具，写代码、调试到构建都在手机本地完成；也可改用远程 SSH 服务器作为执行后端，把手机变成远程项目的移动工作站。
 
-上手无需任何准备：装上 App、在「AI 供应商」配好模型即可直接开发，不用电脑，也不用自己搭建环境。AiCode 不内置模型、不绑定供应商，支持 OpenAI / Anthropic / Gemini 三类协议与自定义供应商，模型、密钥与端点都由你自行配置。
+上手只需装上 App、在「AI 供应商」配好模型即可直接开发；容器镜像首次使用需在设置里手动添加或下载。Muse 不内置模型、不绑定供应商，支持 OpenAI / Anthropic / Gemini 三类协议与自定义供应商，模型、密钥与端点都由你自行配置。
 
 ## 本仓库改动
 
-本仓库是上游 [jieapi/AiCode](https://github.com/jieapi/AiCode) 的界面二改，**不修改任何业务逻辑**，只调整视觉风格，改为 miuix（HyperOS）观感：
+本仓库基于上游 [jieapi/aicode](https://github.com/jieapi/aicode)，品牌改为 Muse、包名为 `com.muse`，界面改为 miuix（HyperOS）观感：
 
 - **主题**：浅灰页底 + 纯白卡片、主色 `#3482FF`、大圆角体系（8/12/16/22/28dp）、字号层级重排；深色模式改为纯黑底 + 深灰卡片。
 - **设置页**：大标题顶栏、22dp 分组卡片、彩色小图标、50×30 胶囊开关、浅灰圆角搜索框，整页字号与图标按 0.9 比例缩小。
@@ -62,7 +62,7 @@ AiCode 是运行在 Android 上的通用 AI Coding Agent，把一套完整的 Li
 - **图标**：启动图标换为 miuix 风白色卡片图标（各密度与自适应图标同步更新）。
 - **关于页**：移除「更新通道」入口；版本更新检查与下载链接指向本仓库；GitHub 入口拆为「上游项目」与「本项目」两条。
 - **抽屉/浏览器**：分段控件改胶囊、悬浮 Tab 栏去玻璃质感、抽屉底部入口字号随设置页缩小，浏览器页面字号整体 0.9。
-- **构建**：新增 `miuix` buildType（`applicationId = com.aicode.miuix`、`versionNameSuffix = -miuix`），可与官方版同机共存；官方 `release` 配置保持不变。
+- **构建**：`miuix` buildType 直接产出 `applicationId = com.muse`、`versionName = 1.8.0` 的包，可与官方 AiCode 同机共存；官方 `release` 配置保持不变。
 
 界面风格参考了 [Mangi-11/Eta](https://github.com/Mangi-11/Eta) 的 miuix 设计，仅借鉴视觉参数，未复制其代码。
 
@@ -127,7 +127,7 @@ AiCode 是运行在 Android 上的通用 AI Coding Agent，把一套完整的 Li
 
 ## Star
 
-如果 AiCode 对你有帮助，欢迎 [Star](https://github.com/jieapi/aicode) 支持，让更多开发者看到这个项目。
+如果 Muse 对你有帮助，欢迎 [Star](https://github.com/xzyy03/Muse) 支持。
 
 ## Star History
 
@@ -154,7 +154,7 @@ AiCode 是运行在 Android 上的通用 AI Coding Agent，把一套完整的 Li
 
 ## 免责声明
 
-AiCode 按「现状」提供，仅供学习、研究与合法的软件开发用途。严禁将本软件用于任何违法或侵权用途，包括但不限于未经授权入侵、破解、逆向工程他人软件或系统，绕过技术保护措施，窃取或泄露他人数据，传播恶意代码等侵害他人合法权益的行为。
+Muse 按「现状」提供，仅供学习、研究与合法的软件开发用途。严禁将本软件用于任何违法或侵权用途，包括但不限于未经授权入侵、破解、逆向工程他人软件或系统，绕过技术保护措施，窃取或泄露他人数据，传播恶意代码等侵害他人合法权益的行为。
 
 使用者应自行承担使用本软件的全部风险与责任；对于使用者因使用或无法使用本软件而产生的任何损失，以及其利用本软件实施的任何行为及后果，作者与贡献者均不承担任何责任。
 

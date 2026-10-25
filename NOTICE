@@ -1,16 +1,16 @@
-AiCode MiUiX
-Copyright (C) 2026 AiCode MiUiX contributors
+Muse
+Copyright (C) 2026 Muse contributors
 
 This repository is a modified version of AiCode:
-    Upstream: https://github.com/jieapi/AiCode
+    Upstream: https://github.com/jieapi/aicode
     Original author: jieapi (https://github.com/jieapi)
     Upstream license: GNU General Public License version 3.0 (GPL-3.0)
 
 Modification notice (GPL-3.0 section 5a):
-    Changes made on 2026-10-25 are limited to the user interface styling
-    (miuix / HyperOS look), plus an additional "miuix" build variant with a
-    distinct applicationId (com.aicode.miuix) so that it can be installed
-    alongside the official build. No business logic was intentionally changed.
+    Changes made on 2026-10-25 include the miuix / HyperOS UI styling, the
+    Muse branding and package name (com.muse), a memory settings page, chat
+    shortcuts, and removing the bundled Alpine rootfs (container images are
+    added manually). No upstream business logic was intentionally changed.
     All modifications are released under GPL-3.0 as well.
 
 AiCode
