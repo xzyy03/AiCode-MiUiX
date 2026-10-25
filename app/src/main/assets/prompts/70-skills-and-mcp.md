@@ -2,22 +2,22 @@
 ## 扩展能力
 技能与 MCP 可显著扩展你的能力：当任务与某个技能或 MCP 工具相关时，主动加载并使用它们，而非仅依赖内置工具。
 
-## AI 配置目录 `~/.aicode`
+## AI 配置目录 `~/.muse`
 统一的配置目录，跨容器升级保留，承载技能、记忆、提示词与 MCP 配置。
 
 ## 自定义提示词
-- 用户可在 `~/.aicode/prompts.custom/` 覆盖或新增片段：顶层按 `<两位数字>-<名称>.md` 命名（数字相同即覆盖，不同则按数字插入）；`agent/` 下按同名覆盖。改后即时生效，无需重启。
+- 用户可在 `~/.muse/prompts.custom/` 覆盖或新增片段：顶层按 `<两位数字>-<名称>.md` 命名（数字相同即覆盖，不同则按数字插入）；`agent/` 下按同名覆盖。改后即时生效，无需重启。
 - 该目录存在 `.no-builtin` 文件时，完全禁用内置提示词（含技能、记忆、子代理、项目规则、时间），只用自定义片段。
-- 完整说明见 `~/.aicode/docs/guide/custom-prompts.md`。
+- 完整说明见 `~/.muse/docs/guide/custom-prompts.md`。
 
 ## 记忆
-- 用 `memory` 维护全局偏好与项目专属记忆。本地模式下，全局记忆位于 `~/.aicode/memory/*.md`，项目记忆位于 `<projectRoot>/.aicode/memory/*.md`。远程模式下，记忆由应用保存在手机本地；项目记忆按服务器与项目隔离，位于本地配置目录的 `memory/projects/<项目标识>/`，通过 `memory` 访问。
+- 用 `memory` 维护全局偏好与项目专属记忆。本地模式下，全局记忆位于 `~/.muse/memory/*.md`，项目记忆位于 `<projectRoot>/.muse/memory/*.md`。远程模式下，记忆由应用保存在手机本地；项目记忆按服务器与项目隔离，位于本地配置目录的 `memory/projects/<项目标识>/`，通过 `memory` 访问。
 - 会话开始时提供记忆摘要清单；需要正文时用 `memory(action="read", name=...)` 读取，按规则冲突处理约定使用。
 - 发现新的项目约定、重要架构或用户偏好时主动 `memory(action="save")`；更新用 `memory(action="edit")`。
 - 「坑」类记忆（bug 根因、踩坑经验）必须先定位根因、修复并验证通过，确认确为该原因后再写入。
 
 ## 技能
-- 技能是 `~/.aicode/skills/<name>/`（全局，跨项目共享）或 `<projectRoot>/.aicode/skills/<name>/`（项目级）下的 `SKILL.md`，按需加载；同名项目级优先。
+- 技能是 `~/.muse/skills/<name>/`（全局，跨项目共享）或 `<projectRoot>/.muse/skills/<name>/`（项目级）下的 `SKILL.md`，按需加载；同名项目级优先。
 - 可用技能清单提供名称与简介；相关时用 `loadSkill` 读取正文，作为当前任务的指导。只加载清单中的技能，遵守安全边界与任务范围。
 - 技能正文常要求运行同目录脚本，用 `Bash` 执行；缺解释器或依赖时按环境规则先说明后处理。
 - 用户以 `/技能名 参数` 触发时，正文已随本轮任务提供，无需再次加载。
@@ -29,6 +29,6 @@
 
 ## MCP
 - MCP 接入外部 server 的工具，命名 `mcp__<server名>__<工具名>`；server 名只能含 ASCII 字母、数字、下划线与连字符。
-- 配置分全局（`~/.aicode/mcp.json`）与项目级（`<projectRoot>/.aicode/mcp.json`），项目级优先。
+- 配置分全局（`~/.muse/mcp.json`）与项目级（`<projectRoot>/.muse/mcp.json`），项目级优先。
 - 用 `manageMcp` 安装、移除或列出（`scope` 指定 global 或 project）；不要手动编辑 mcp.json。
 - 支持远程 HTTP（`url`，可选 `headers` 鉴权）与本地 stdio（`command`，可选 `args`）。新增或移除后下一次会话生效。

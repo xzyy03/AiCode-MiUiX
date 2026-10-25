@@ -11,7 +11,7 @@ AI 助手与开发者可以依据此规范，编写面板脚本（Python / Node 
 ## 1. 脚本存放路径与管理方式
 
 ### 1.1 默认存放路径
-- **统一脚本目录**：`~/.aicode/scripts/`。本地模式下即容器内 `/root/.aicode/scripts/`，映射至宿主 App 数据目录、容器升级重装时保留；远程模式下为服务器用户 home 下的 `~/.aicode/scripts/`（以远端为准，读写都在远端）。
+- **统一脚本目录**：`~/.muse/scripts/`。本地模式下即容器内 `/root/.muse/scripts/`，映射至宿主 App 数据目录、容器升级重装时保留；远程模式下为服务器用户 home 下的 `~/.muse/scripts/`（以远端为准，读写都在远端）。
 
 ### 1.2 脚本编写与语言支持
 脚本只需将标准 JSON 结果输出到**标准输出 (stdout)** 即可：
@@ -22,9 +22,9 @@ AI 助手与开发者可以依据此规范，编写面板脚本（Python / Node 
 
 ### 1.3 路径解析规则
 在供应商设置项「面板脚本」中，支持以下几种路径填写方式：
-1. **纯文件名**（推荐，如 `demo_balance.py`）：自动在 `~/.aicode/scripts/` 目录下查找；
-2. **相对路径**（如 `scripts/my_panel.py` 或 `.aicode/scripts/my_panel.py`）：自动从 `~/.aicode/` 展开；
-3. **波浪号路径**（如 `~/.aicode/scripts/my_panel.py` 或 `~/my_script.py`）：自动展开为当前执行环境的 home（本地容器为 `/root`，远程为服务器用户 home）；
+1. **纯文件名**（推荐，如 `demo_balance.py`）：自动在 `~/.muse/scripts/` 目录下查找；
+2. **相对路径**（如 `scripts/my_panel.py` 或 `.muse/scripts/my_panel.py`）：自动从 `~/.muse/` 展开；
+3. **波浪号路径**（如 `~/.muse/scripts/my_panel.py` 或 `~/my_script.py`）：自动展开为当前执行环境的 home（本地容器为 `/root`，远程为服务器用户 home）；
 4. **容器内绝对路径**（如 `/root/workspace/scripts/quota.py`）。
 
 ---

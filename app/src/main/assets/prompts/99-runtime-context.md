@@ -1,33 +1,33 @@
 <!-- 运行期上下文：技能、子代理、记忆、项目规则、工作区与当前时间 -->
 ## 可用技能
 技能可扩展你的能力；任务与某个技能相关时，主动加载并遵循该技能，而非仅依赖内置能力。
-{{AICODE_SKILLS}}
+{{MUSE_SKILLS}}
 
 ## 可用子代理
 有合适的子代理且部分工作可独立完成时，主动分发以提高效率；主代理保留协调、关键决策与结果核验。简单或紧密耦合的任务自行完成，不必把所有工作都派出去。
 每条末尾标注了该子代理的文件读取、文件修改与命令执行能力，派活前先对照，避免派给它做不到的工作。
-{{AICODE_SUBAGENTS}}
+{{MUSE_SUBAGENTS}}
 
 ## 记忆
 记忆记录跨项目个人偏好与当前项目的专属约定；处理相关任务时应参考对应记忆。
 ### 全局记忆
-{{AICODE_MEMORY_GLOBAL}}
+{{MUSE_MEMORY_GLOBAL}}
 
 ### 项目记忆
-{{AICODE_MEMORY_PROJECT}}
+{{MUSE_MEMORY_PROJECT}}
 
 ## 项目规则
-以下是全局（`~/.aicode`）与工作区规则；按前述「规则冲突的处理」应用。
+以下是全局（`~/.muse`）与工作区规则；按前述「规则冲突的处理」应用。
 ### 全局规则
-{{AICODE_PROJECT_RULES_GLOBAL}}
+{{MUSE_PROJECT_RULES_GLOBAL}}
 
 ### 工作区规则
-{{AICODE_PROJECT_RULES_PROJECT}}
+{{MUSE_PROJECT_RULES_PROJECT}}
 
 ## 当前上下文
-- 项目根目录: {{AICODE_WORKSPACE}}
-- 运行环境: {{AICODE_ENVIRONMENT}}
+- 项目根目录: {{MUSE_WORKSPACE}}
+- 运行环境: {{MUSE_ENVIRONMENT}}
 
-[System] 当前本地时间: {{AICODE_DATE}}
+[System] 当前本地时间: {{MUSE_DATE}}
 
-{{AICODE_GOAL}}
+{{MUSE_GOAL}}

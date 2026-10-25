@@ -314,13 +314,13 @@
     <string name="provider_test_resp_body">响应体</string>
     <string name="provider_test_error_detail">错误堆栈</string>
     <string name="provider_dashboard_test_failed">执行失败</string>
-    <string name="provider_dashboard_no_scripts">~/.aicode/scripts 目录下暂无脚本</string>
+    <string name="provider_dashboard_no_scripts">~/.muse/scripts 目录下暂无脚本</string>
     <string name="provider_dashboard_select_title">选择面板脚本</string>
     <string name="provider_dashboard_clear_script">不使用面板脚本 (清空)</string>
     <string name="provider_dashboard_loading">正在加载面板…</string>
     <string name="provider_dashboard_raw_output">原始输出</string>
     <string name="provider_script_params_title">脚本参数</string>
-    <string name="provider_script_params_desc">以 AICODE_KEY_&lt;KEY&gt; 注入面板脚本环境变量</string>
+    <string name="provider_script_params_desc">以 MUSE_KEY_&lt;KEY&gt; 注入面板脚本环境变量</string>
     <string name="provider_script_params_empty">暂无参数，点击下方添加</string>
     <string name="provider_script_param_key">参数名 (KEY)</string>
     <string name="provider_script_param_key_hint">例如 ACCOUNT_ID</string>
@@ -613,8 +613,8 @@
     <string name="agreement_notice_suffix">，了解使用规则与数据处理方式。\n\n点击“同意并继续”表示你已阅读并同意上述两份文件。</string>
     <string name="agreement_accept">同意并继续</string>
     <string name="agreement_decline">不同意</string>
-    <string name="agreement_terms_url">https://aicode.murk.top/terms</string>
-    <string name="agreement_privacy_url">https://aicode.murk.top/privacy</string>
+    <string name="agreement_terms_url">https://muse.murk.top/terms</string>
+    <string name="agreement_privacy_url">https://muse.murk.top/privacy</string>
 
     <!-- Ask User Question -->
     <string name="ask_confirm_title">AI 需要你的确认</string>
@@ -936,7 +936,7 @@
     <string name="container_custom_badge">自定义</string>
     <string name="container_ssh_badge">SSH</string>
     <string name="container_empty">暂无容器与镜像</string>
-    <string name="container_empty_desc">添加一个自定义镜像，或恢复内置 Alpine。</string>
+    <string name="container_empty_desc">还没有容器，点「添加镜像」手动导入或下载。</string>
     <string name="container_restore_builtin">恢复内置 Alpine</string>
     <string name="container_set_as_default">设为默认容器</string>
     <string name="container_default_badge">默认</string>
@@ -1415,7 +1415,7 @@
     <!-- Subagent Settings -->
     <string name="settings_subagents">子代理</string>
     <string name="subagents_empty">还没有自定义子代理</string>
-    <string name="subagents_empty_hint">点右上角「+」新建一个，或把 agent 的 .md 定义放进 ~/.aicode/agents/</string>
+    <string name="subagents_empty_hint">点右上角「+」新建一个，或把 agent 的 .md 定义放进 ~/.muse/agents/</string>
     <string name="subagents_no_project">当前项目暂无子代理</string>
     <string name="subagents_no_global">暂无全局子代理</string>
     <string name="subagents_delete_confirm_title">删除子代理</string>

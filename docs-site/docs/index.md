@@ -21,7 +21,7 @@ hero:
       link: /guide/quick-start
     - theme: alt
       text: 下载 APK
-      link: https://aicode.murk.top/download
+      link: https://muse.murk.top/download
     - theme: alt
       text: GitHub
       link: https://github.com/jieapi/aicode

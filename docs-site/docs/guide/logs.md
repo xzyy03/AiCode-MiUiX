@@ -18,7 +18,7 @@ App 出问题时，日志是最直接的线索。「设置 → 日志」可以�
 ## 日志文件在哪
 
 ```
-/storage/emulated/0/Android/data/com.aicode/files/logs/
+/storage/emulated/0/Android/data/com.muse/files/logs/
 ```
 
 无需 root 权限，用手机自带的文件管理器即可打开。

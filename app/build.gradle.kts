@@ -71,7 +71,7 @@ fun gitCommitCount(): Int = try {
     1
 }
 
-// AI 内置文档（~/.aicode/docs）的源在仓库根的 docs-site/docs：同一份 Markdown 既构建 VitePress
+// AI 内置文档（~/.muse/docs）的源在仓库根的 docs-site/docs：同一份 Markdown 既构建 VitePress
 // 文档站，也在这里复制进 assets/docs 打进 APK，保证「站上看到的」与「AI 读到的」永远一致。
 // 用纯 Gradle Copy 实现，APK 构建不依赖 Node —— CI 与 F-Droid 只装 JDK+Gradle 即可。
 val aiDocsGeneratedDir = layout.buildDirectory.dir("generated/aiDocs")
@@ -86,7 +86,7 @@ val syncAiDocs = tasks.register<Sync>("syncAiDocs") {
 }
 
 android {
-    namespace = "com.aicode"
+    namespace = "com.muse"
     compileSdk = 36
     buildToolsVersion = "35.0.0"
 
@@ -102,7 +102,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.aicode"
+        applicationId = "com.muse"
         minSdk = 26
         // 仍锁 targetSdk 28，但阻塞项已不是 PRoot：proot 全套改由 jniLibs 装到 nativeLibraryDir
         // （见 sourceSets 与 packaging.jniLibs 注释），W^X 不再挡容器启动。升级前待解决：
@@ -112,8 +112,8 @@ android {
         //      保活需换 specialUse。
         // 代价：不能上 Google Play。
         targetSdk = 28
-        versionCode = gitCommitCount()
-        versionName = gitVersionName()
+        versionCode = 1800
+        versionName = "1.8.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -168,9 +168,9 @@ android {
     }
 
     buildTypes {
-        // debug 加包名后缀 .debug → applicationId 变 com.aicode.debug，与 release（com.aicode）
+        // debug 加包名后缀 .debug → applicationId 变 com.muse.debug，与 release（com.muse）
         // 可同机共存、互不覆盖。IDE 跑 debug 不再因签名不同卸载已装的正式版。
-        // 注意：因 applicationId 不同，debug 变体私有目录为 /data/data/com.aicode.debug/，
+        // 注意：因 applicationId 不同，debug 变体私有目录为 /data/data/com.muse.debug/，
         // release 已解压的容器 rootfs 与工作区项目在 debug 下不可见（需重新解压/clone），属预期隔离行为。
         debug {
             applicationIdSuffix = ".debug"
@@ -190,7 +190,7 @@ android {
             }
         }
         // beta 测试版：继承 release 的全部配置（签名/R8/资源压缩/proguard），仅包名后缀 .beta
-        // → applicationId 变 com.aicode.beta，可与正式版同机共存、互不覆盖。
+        // → applicationId 变 com.muse.beta，可与正式版同机共存、互不覆盖。
         // 由 .github/workflows/beta.yml 在 push main 时构建并上传 Artifacts，供测机验证。
         create("beta") {
             initWith(getByName("release"))
@@ -198,12 +198,9 @@ android {
             // :terminal-emulator / :terminal-view 无 beta 变体，依赖解析回退到它们的 release 变体。
             matchingFallbacks += "release"
         }
-        // UI 二改渠道：继承 release 的全部配置，仅包名后缀 .miuix（applicationId 变
-        // com.aicode.miuix）+ 版本名后缀，可与官方版同机共存、互不覆盖，也不触发 Beta 水印。
+        // 本仓库（Muse）固定使用标准版本号；包名即 com.muse，不带任何后缀。
         create("miuix") {
             initWith(getByName("release"))
-            applicationIdSuffix = ".miuix"
-            versionNameSuffix = "-miuix"
             matchingFallbacks += "release"
         }
     }

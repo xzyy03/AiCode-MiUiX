@@ -11,9 +11,9 @@ Muse 的系统提示词可以自行修改。默认提示词随 App 内置、升�
 也可以不碰文件系统，直接在 **设置 → 提示词** 里管理：
 
 - 页面按编号列出**实际生效**的每个片段，右侧徽章标明这份内容来自哪一层：
-  - **项目**：当前工作区的 `.aicode/prompts.custom/`
-  - **全局**：`~/.aicode/prompts.custom/`
-  - **本地**：`~/.aicode/prompts/`（启动时从内置释放的副本）
+  - **项目**：当前工作区的 `.muse/prompts.custom/`
+  - **全局**：`~/.muse/prompts.custom/`
+  - **本地**：`~/.muse/prompts/`（启动时从内置释放的副本）
   - **内置**：App 自带的 `assets/prompts/`
 - 同一编号只生效优先级最高的一份，优先级 **项目 > 全局 > 本地 > 内置**，其余被遮挡。
 - 点一行编辑它的内容。保存默认写到该编号当前生效的层；「本地/内置」不可写，编辑后默认落到全局层，可在编辑页把作用域切到项目层（有工作区时）。
@@ -35,10 +35,10 @@ App 里的改动与手工放文件完全等价，两种方式可以混用。
 
 ## 目录结构
 
-提示词放在 AI 配置目录 `~/.aicode/` 下（本地模式容器内为 `/root/.aicode/`；远程模式为服务器用户 home 下的 `.aicode/`，读写以远端为准）：
+提示词放在 AI 配置目录 `~/.muse/` 下（本地模式容器内为 `/root/.muse/`；远程模式为服务器用户 home 下的 `.muse/`，读写以远端为准）：
 
 ```
-~/.aicode/
+~/.muse/
 ├── prompts/          默认提示词（App 启动时全量释放，升级自动覆盖）
 │   ├── 00-identity.md
 │   ├── 10-communication.md
@@ -80,9 +80,9 @@ App 里的改动与手工放文件完全等价，两种方式可以混用。
 
 顶层数字片段（`<两位数字>-<名称>.md`）按四级来源查找，同一编号只生效优先级最高的一份，找到即止：
 
-1. **项目**：`<工作区>/.aicode/prompts.custom/`（远程模式下是 App 私有目录里对应的项目目录）
-2. **全局**：`~/.aicode/prompts.custom/`
-3. **本地**：`~/.aicode/prompts/<同名文件>` — 启动时释放的副本
+1. **项目**：`<工作区>/.muse/prompts.custom/`（远程模式下是 App 私有目录里对应的项目目录）
+2. **全局**：`~/.muse/prompts.custom/`
+3. **本地**：`~/.muse/prompts/<同名文件>` — 启动时释放的副本
 4. **内置**：App 自带的 `assets/prompts/`
 
 `agent/` 下的按需片段（无编号）没有项目层，按「全局自定义（`prompts.custom/agent/xxx.md`）→ 本地 → 内置」三级查找。
@@ -91,7 +91,7 @@ App 里的改动与手工放文件完全等价，两种方式可以混用。
 
 ## 修改方式
 
-1. 在 `~/.aicode/prompts.custom/` 下（没有就手动创建）放入片段：覆盖内置片段用相同数字命名，新增片段用尚未占用的数字命名，子目录片段（如 `agent/plan-mode.md`）对应放到 `prompts.custom/agent/` 下。
+1. 在 `~/.muse/prompts.custom/` 下（没有就手动创建）放入片段：覆盖内置片段用相同数字命名，新增片段用尚未占用的数字命名，子目录片段（如 `agent/plan-mode.md`）对应放到 `prompts.custom/agent/` 下。
 2. 编辑内容。
 3. **保存后即时生效**（无需重启 App）。
 
@@ -125,7 +125,7 @@ App 里的改动与手工放文件完全等价，两种方式可以混用。
 | `{{AICODE_SUBAGENTS}}` | 可用子代理列表（每行一项） |
 | `{{AICODE_MEMORY_GLOBAL}}` | 全局记忆列表（每行一项） |
 | `{{AICODE_MEMORY_PROJECT}}` | 项目记忆列表（每行一项） |
-| `{{AICODE_PROJECT_RULES_GLOBAL}}` | 全局项目规则正文（`~/.aicode` 下的 `AGENTS.md` / `CLAUDE.md`） |
+| `{{AICODE_PROJECT_RULES_GLOBAL}}` | 全局项目规则正文（`~/.muse` 下的 `AGENTS.md` / `CLAUDE.md`） |
 | `{{AICODE_PROJECT_RULES_PROJECT}}` | 工作区项目规则正文（项目根目录下的 `AGENTS.md` / `CLAUDE.md`） |
 | `{{AICODE_PROJECT_RULES}}` | 等价于 `{{AICODE_PROJECT_RULES_PROJECT}}`，为兼容旧片段保留 |
 | `{{AICODE_WORKSPACE}}` | 项目根目录（`~/workspace`，未选工作区时为提示文本） |
@@ -178,7 +178,7 @@ App 里的改动与手工放文件完全等价，两种方式可以混用。
 
 ## 恢复默认
 
-删掉 `~/.aicode/prompts.custom/` 下对应的文件，那个片段就恢复默认版本；删掉整个 `prompts.custom/` 目录则全部恢复（`.no-builtin` 一并删除后内置提示词重新启用）。
+删掉 `~/.muse/prompts.custom/` 下对应的文件，那个片段就恢复默认版本；删掉整个 `prompts.custom/` 目录则全部恢复（`.no-builtin` 一并删除后内置提示词重新启用）。
 
 ## 注意
 

@@ -314,13 +314,13 @@
     <string name="provider_test_resp_body">Response Body</string>
     <string name="provider_test_error_detail">Error Stack</string>
     <string name="provider_dashboard_test_failed">Execution Failed</string>
-    <string name="provider_dashboard_no_scripts">No scripts found in ~/.aicode/scripts/</string>
+    <string name="provider_dashboard_no_scripts">No scripts found in ~/.muse/scripts/</string>
     <string name="provider_dashboard_select_title">Select Dashboard Script</string>
     <string name="provider_dashboard_clear_script">None (Clear script)</string>
     <string name="provider_dashboard_loading">Loading dashboard...</string>
     <string name="provider_dashboard_raw_output">Raw Output</string>
     <string name="provider_script_params_title">Script Parameters</string>
-    <string name="provider_script_params_desc">Injected into the panel script as AICODE_KEY_&lt;KEY&gt; environment variables</string>
+    <string name="provider_script_params_desc">Injected into the panel script as MUSE_KEY_&lt;KEY&gt; environment variables</string>
     <string name="provider_script_params_empty">No parameters yet. Tap below to add</string>
     <string name="provider_script_param_key">Parameter name (KEY)</string>
     <string name="provider_script_param_key_hint">e.g. ACCOUNT_ID</string>
@@ -613,8 +613,8 @@
     <string name="agreement_notice_suffix">" to understand the usage rules and data handling practices.\n\nBy tapping “Agree and continue”, you confirm that you have read and agree to both documents."</string>
     <string name="agreement_accept">Agree and continue</string>
     <string name="agreement_decline">Disagree</string>
-    <string name="agreement_terms_url">https://aicode.murk.top/en/terms</string>
-    <string name="agreement_privacy_url">https://aicode.murk.top/en/privacy</string>
+    <string name="agreement_terms_url">https://muse.murk.top/en/terms</string>
+    <string name="agreement_privacy_url">https://muse.murk.top/en/privacy</string>
 
     <!-- Ask User Question -->
     <string name="ask_confirm_title">AI needs your confirmation</string>
@@ -936,7 +936,7 @@
     <string name="container_custom_badge">Custom</string>
     <string name="container_ssh_badge">SSH</string>
     <string name="container_empty">No containers or images</string>
-    <string name="container_empty_desc">Add a custom image, or restore the built-in Alpine.</string>
+    <string name="container_empty_desc">No containers yet. Tap "Add image" to import or download one.</string>
     <string name="container_restore_builtin">Restore Built-in Alpine</string>
     <string name="container_set_as_default">Set as default container</string>
     <string name="container_default_badge">Default</string>
@@ -1415,7 +1415,7 @@
     <!-- Subagent Settings -->
     <string name="settings_subagents">Subagents</string>
     <string name="subagents_empty">No custom subagents yet</string>
-    <string name="subagents_empty_hint">Tap + in the top bar to create one, or drop an agent\'s .md definition into ~/.aicode/agents/</string>
+    <string name="subagents_empty_hint">Tap + in the top bar to create one, or drop an agent\'s .md definition into ~/.muse/agents/</string>
     <string name="subagents_no_project">No subagents in this project</string>
     <string name="subagents_no_global">No global subagents</string>
     <string name="subagents_delete_confirm_title">Delete subagent</string>
