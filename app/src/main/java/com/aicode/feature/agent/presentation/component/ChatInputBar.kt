@@ -573,12 +573,6 @@ internal fun ChatInputBar(
                         .padding(horizontal = Spacing.xs, vertical = 2.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    UploadIconButton(
-                        enabled = !isBusy,
-                        icon = FeatherIcons.Plus,
-                        contentDescription = stringResource(R.string.chat_add_attachment),
-                        onClick = { showAttachmentSheet = true }
-                    )
                     Row(
                         modifier = Modifier.weight(1f),
                         verticalAlignment = Alignment.CenterVertically
@@ -674,6 +668,12 @@ internal fun ChatInputBar(
                             )
                         }
                     }
+                    UploadIconButton(
+                        enabled = !isBusy,
+                        icon = FeatherIcons.Plus,
+                        contentDescription = stringResource(R.string.chat_add_attachment),
+                        onClick = { showAttachmentSheet = true }
+                    )
                     SendButton(canSend = canSend, hasContent = hasContent, isBusy = isBusy, tokenProgress = tokenProgress, tokenEstimated = tokenEstimated, onSend = onSend, onStop = onStop)
                 }
             }

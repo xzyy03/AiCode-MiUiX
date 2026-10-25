@@ -1,10 +1,13 @@
 package com.aicode.feature.agent.presentation.component
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Build
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,15 +32,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import com.aicode.R
 import com.aicode.core.theme.Radius
 import com.aicode.core.theme.Spacing
@@ -51,6 +63,8 @@ import compose.icons.feathericons.Globe
 import compose.icons.feathericons.Menu
 import compose.icons.feathericons.Plus
 import compose.icons.feathericons.Terminal
+import kotlinx.coroutines.delay
+import java.util.Locale
 
 @Composable
 internal fun ChatHeader(
@@ -141,6 +155,7 @@ internal fun ChatHeader(
                         }
                     }
                 }
+                MemoryChip()
                 WorkbenchIconButton(
                     icon = FeatherIcons.Plus,
                     contentDescription = stringResource(R.string.chat_new_session),
@@ -305,6 +320,101 @@ internal fun WelcomeState(bottomReserve: Dp, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    }
+}
+
+private data class DeviceMemoryStat(
+    val usedBytes: Long,
+    val totalBytes: Long,
+    val availBytes: Long
+) {
+    val percent: Int
+        get() = if (totalBytes <= 0L) 0 else ((usedBytes * 100) / totalBytes).toInt()
+}
+
+private fun readDeviceMemory(context: Context): DeviceMemoryStat {
+    val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
+    val info = ActivityManager.MemoryInfo()
+    manager?.getMemoryInfo(info)
+    val total = info.totalMem
+    val avail = info.availMem
+    return DeviceMemoryStat(
+        usedBytes = (total - avail).coerceAtLeast(0L),
+        totalBytes = total,
+        availBytes = avail
+    )
+}
+
+private fun formatGb(bytes: Long): String =
+    String.format(Locale.US, "%.1f", bytes / 1024.0 / 1024.0 / 1024.0)
+
+/** 顶栏内存胶囊：显示占用百分比，点开显示已用 / 总 / 可用。 */
+@Composable
+private fun MemoryChip() {
+    val context = LocalContext.current
+    val density = LocalDensity.current
+    var stat by remember { mutableStateOf(readDeviceMemory(context)) }
+    var expanded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            stat = readDeviceMemory(context)
+            delay(3_000)
+        }
+    }
+
+    Box {
+        Surface(
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier
+                .clip(RoundedCornerShape(50))
+                .clickable { expanded = true }
+        ) {
+            Text(
+                text = stringResource(R.string.memory_chip_label, stat.percent),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+            )
+        }
+
+        if (expanded) {
+            Popup(
+                alignment = Alignment.TopEnd,
+                offset = IntOffset(0, with(density) { 40.dp.roundToPx() }),
+                onDismissRequest = { expanded = false },
+                properties = PopupProperties(focusable = true)
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    shadowElevation = 8.dp
+                ) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Text(
+                            text = stringResource(
+                                R.string.memory_popup_used,
+                                formatGb(stat.usedBytes),
+                                formatGb(stat.totalBytes)
+                            ),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = stringResource(R.string.memory_popup_avail, formatGb(stat.availBytes)),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
         }
     }
 }

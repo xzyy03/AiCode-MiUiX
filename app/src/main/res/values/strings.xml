@@ -151,6 +151,9 @@
     <string name="memory_deleted">已删除</string>
     <string name="memory_delete_failed">删除失败</string>
     <string name="memory_delete_confirm_title">删除记忆</string>
+    <string name="memory_chip_label">内存 %1$d%%</string>
+    <string name="memory_popup_used">已用 %1$s GB / 总 %2$s GB</string>
+    <string name="memory_popup_avail">可用 %1$s GB</string>
     <string name="memory_delete_confirm_message">确定删除「%1$s」吗？此操作不可撤销。</string>
     <string name="settings_container">容器与镜像</string>
     <string name="settings_log_no_files">还没有日志文件</string>

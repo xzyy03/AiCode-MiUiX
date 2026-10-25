@@ -151,6 +151,9 @@
     <string name="memory_deleted">Deleted</string>
     <string name="memory_delete_failed">Failed to delete</string>
     <string name="memory_delete_confirm_title">Delete memory</string>
+    <string name="memory_chip_label">Memory %1$d%%</string>
+    <string name="memory_popup_used">Used %1$s GB / Total %2$s GB</string>
+    <string name="memory_popup_avail">%1$s GB available</string>
     <string name="memory_delete_confirm_message">Delete "%1$s"? This cannot be undone.</string>
     <string name="settings_container">Container &amp; Images</string>
     <string name="settings_log_no_files">No log files yet</string>
