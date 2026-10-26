@@ -519,6 +519,13 @@ class LinuxContainerEngine @Inject constructor(
     override suspend fun ensureInstalled() {
         val profile = currentProfile
         val startedAt = System.currentTimeMillis()
+        // 还没添加任何容器（profile 为空占位）：不进安装流程，直接报可读错误，
+        // 否则会去读 assets 里已不存在的内置镜像目录而崩溃。
+        if (profile.id.isBlank()) {
+            val reason = "尚未添加容器，请先在「设置 → 容器与镜像」添加或下载一个镜像"
+            _initProgress.value = ContainerInitState.Failed(reason)
+            throw IllegalStateException(reason)
+        }
         FileLogger.i(
             TAG,
             "ensureInstalled 开始：profile=${profile.id}(${profile.name}) mode=${profile.mode} " +

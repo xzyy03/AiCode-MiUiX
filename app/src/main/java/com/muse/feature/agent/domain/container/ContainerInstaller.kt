@@ -251,7 +251,7 @@ class ContainerInstaller @Inject constructor(
         private const val DELETE_PROGRESS_STEP = 2000
     }
 
-    /** assets 内的架构特定目录 */
+    /** assets 内的架构特定目录；内置镜像已移除时为空串（调用方应先用 [hasBuiltinRootfs] 判定）。 */
     val ASSET_DIR: String
         get() {
             // 优先按设备 ABI 选对应镜像目录。
@@ -259,11 +259,20 @@ class ContainerInstaller @Inject constructor(
             // 若该套不在 assets 里（例如 armsolo 包被装到只报 x86 的设备），下面会 fallback
             // 到实际存在的那套，避免 open() 直接崩溃——proot 能否真正运行由设备 ABI 决定，
             // 但至少 asset 查找层不会挂。
+            // 本仓库已不再打包内置镜像：两套都不在时返回空串，绝不返回不存在的目录名，
+            // 否则 Assets.open 会抛 FileNotFoundException 把调用方带崩。
             val preferX86 = android.os.Build.SUPPORTED_ABIS.any { it.contains("x86") }
             val first = if (preferX86) "container/x86" else "container/arm"
             val fallback = if (preferX86) "container/arm" else "container/x86"
-            return if (assetExists(first)) first else fallback
+            return when {
+                assetExists(first) -> first
+                assetExists(fallback) -> fallback
+                else -> ""
+            }
         }
+
+    /** 当前 APK 是否打过内置 rootfs（本仓库为 false，容器镜像全部由用户添加）。 */
+    val hasBuiltinRootfs: Boolean get() = ASSET_DIR.isNotEmpty()
 
     /** 轻量探测某 asset 路径是否被打进当前 APK（用于 [ASSET_DIR] 的 fallback 判断） */
     private fun assetExists(path: String): Boolean =
@@ -348,6 +357,10 @@ class ContainerInstaller @Inject constructor(
         if (isInstalled()) {
             FileLogger.d(TAG, "rootfs 已是当前版本（$INSTALL_VERSION），跳过解压")
             return@withContext
+        }
+        if (!hasBuiltinRootfs) {
+            // 本仓库不打包内置镜像，走到这里说明调用了内置安装路径；给出可读错误而不去 open 不存在的 asset。
+            throw IllegalStateException("当前安装包未内置容器镜像，请在「设置 → 容器与镜像」中添加或下载一个镜像")
         }
 
         val startedAt = System.currentTimeMillis()
@@ -437,8 +450,13 @@ class ContainerInstaller @Inject constructor(
         dest.mkdirs()
 
         when (val src = profile.rootfsSource) {
-            is RootfsSource.Asset -> context.assets.open("${ASSET_DIR}/${src.path}").use {
-                extractRootfsTo(dest, it, CompressedFormat.GZIP, onProgress)
+            is RootfsSource.Asset -> {
+                if (!hasBuiltinRootfs || src.path.isBlank()) {
+                    throw IllegalStateException("当前安装包未内置容器镜像，请在「设置 → 容器与镜像」中添加或下载一个镜像")
+                }
+                context.assets.open("${ASSET_DIR}/${src.path}").use {
+                    extractRootfsTo(dest, it, CompressedFormat.GZIP, onProgress)
+                }
             }
             is RootfsSource.LocalFile -> {
                 val uri = android.net.Uri.parse(src.uri)
