@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import com.muse.core.ui.AdaptiveModalBottomSheet
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -35,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 import com.muse.R
 import com.muse.core.theme.Radius
 import com.muse.core.theme.Spacing
@@ -221,62 +225,58 @@ internal fun ReasoningEffortSelector(
 
                 ReasoningHintLines(plan = plan, capability = capability)
 
-                levels.forEach { e ->
-                    val selected = thinkingOn && e == effort
-                    // 想关却关不掉时，把「实际会发的档位」标出来，避免用户以为思考真的停了。
-                    val effectiveWhenOff = !thinkingOn &&
-                        plan.reason == ReasoningPlan.Reason.CANNOT_DISABLE &&
-                        plan.effectiveLevel == e
+                if (levels.isNotEmpty()) {
+                    // 档位滑块：拖动选择，刻度对应 levels 下标；点「不思考」开关切换到 NONE。
+                    val selectedIndex = remember(levels, effort) {
+                        levels.indexOf(effort).takeIf { it >= 0 && thinkingOn } ?: 0
+                    }
+                    val currentIndex = remember(selectedIndex, levels) {
+                        if (levels.isEmpty()) 0f else selectedIndex.coerceIn(0, levels.lastIndex).toFloat()
+                    }
+                    Spacer(Modifier.height(Spacing.md))
+                    Slider(
+                        value = currentIndex,
+                        onValueChange = { v ->
+                            val idx = v.roundToInt().coerceIn(0, levels.lastIndex)
+                            if (levels[idx] != effort) onChange(levels[idx])
+                        },
+                        valueRange = 0f..(levels.lastIndex.coerceAtLeast(1)).toFloat(),
+                        steps = (levels.size - 2).coerceAtLeast(0),
+                        enabled = enabled,
+                        colors = SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colorScheme.primary,
+                            activeTrackColor = MaterialTheme.colorScheme.primary,
+                            inactiveTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                            activeTickColor = MaterialTheme.colorScheme.onPrimary,
+                            inactiveTickColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = Spacing.xs)
+                    )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(Radius.sm))
-                            .clickable(enabled = enabled) {
-                                showSheet = false
-                                onChange(e)
-                            }
-                            .padding(horizontal = Spacing.md, vertical = Spacing.md),
-                        verticalAlignment = Alignment.CenterVertically
+                            .padding(horizontal = Spacing.xs, vertical = Spacing.xs),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(
-                            FeatherIcons.Zap,
-                            contentDescription = null,
-                            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(Modifier.width(Spacing.md))
+                        levels.forEach { e ->
+                            val active = thinkingOn && e == effort
+                            Text(
+                                text = stringResource(e.labelRes()),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = if (active) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1
+                            )
+                        }
+                    }
+                    if (effort == capability.defaultLevel) {
                         Text(
-                            text = e.withApiLabel(),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.weight(1f),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            text = stringResource(R.string.chat_reasoning_default_tag),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        if (e == capability.defaultLevel) {
-                            Text(
-                                text = stringResource(R.string.chat_reasoning_default_tag),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        if (effectiveWhenOff) {
-                            Spacer(Modifier.width(Spacing.sm))
-                            Text(
-                                text = stringResource(R.string.chat_reasoning_effective_tag),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        if (selected) {
-                            Spacer(Modifier.width(Spacing.sm))
-                            Icon(
-                                FeatherIcons.Check,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
                     }
                 }
             }
