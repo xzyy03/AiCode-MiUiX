@@ -121,6 +121,31 @@ private fun decodeWithOomRetry(
 data class ImageDecodeSpec(val maxEdge: Int, val maxPixels: Long)
 
 /**
+ * 缩略图内存缓存：聊天列表里带图消息滑出视口就会被回收，滑回来时每次都要重新读盘解码原图。
+ * 按路径索引：附件落盘时已保证文件名唯一，不会被原地替换；也因此 [peek] 在组合阶段调用时不做任何文件 IO。
+ * 缩略图最大边 180px，单张约 130KB，条数上限即内存上限。
+ */
+object ThumbnailCache {
+    private const val MAX_ENTRIES = 96
+
+    private val cache = object : LinkedHashMap<String, ImageBitmap>(32, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, ImageBitmap>?): Boolean =
+            size > MAX_ENTRIES
+    }
+
+    /** 命中则同步返回（可作 produceState 初值，避免闪占位图）。 */
+    fun peek(path: String): ImageBitmap? = synchronized(cache) { cache[path] }
+
+    /** 取缓存，未命中则解码并写入；解码失败不缓存。应在后台线程调用。 */
+    fun load(path: String): ImageBitmap? {
+        peek(path)?.let { return it }
+        val decoded = decodeSampledBitmap(path, THUMBNAIL_MAX_EDGE) ?: return null
+        synchronized(cache) { cache[path] = decoded }
+        return decoded
+    }
+}
+
+/**
  * 全屏查看器的解码档位，跟当前窗口走而不写死。
  *
  * 查看器允许放大看细节，故取窗口长边的 1.5 倍，夹在 1024..2048。写死 2048 在 1080p 手机上

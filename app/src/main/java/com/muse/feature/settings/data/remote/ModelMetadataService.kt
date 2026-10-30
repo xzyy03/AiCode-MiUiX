@@ -89,7 +89,8 @@ class ModelMetadataService @Inject constructor(
                 else -> null
             } ?: return@withContext
             if (body.isBlank()) return@withContext
-            runCatching { catalogLock.withLock { parseCatalogWithDiagnostics(body, "refresh").also { cached = it } } }
+            // 解析放在锁外：持锁解析 5MB 目录会让同时进来的 resolve（发送消息前的必经路径）一直排队。
+            runCatching { parseCatalogWithDiagnostics(body, "refresh").also { fresh -> catalogLock.withLock { cached = fresh } } }
                 .onFailure { FileLogger.w(TAG, "解析模型元数据失败", it) }
         }
     }

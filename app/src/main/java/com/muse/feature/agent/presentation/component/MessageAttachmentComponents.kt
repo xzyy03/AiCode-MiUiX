@@ -37,8 +37,7 @@ import com.muse.core.theme.Brand
 import com.muse.core.theme.Radius
 import com.muse.core.theme.Spacing
 import com.muse.core.ui.LocalImageViewer
-import com.muse.core.ui.THUMBNAIL_MAX_EDGE
-import com.muse.core.ui.decodeSampledBitmap
+import com.muse.core.ui.ThumbnailCache
 import com.muse.core.util.ApkInstaller
 import com.muse.feature.agent.presentation.AgentAttachment
 import com.muse.feature.workspace.domain.FileAccessProvider
@@ -186,10 +185,9 @@ private fun AttachmentThumb(attachment: AgentAttachment) {
 private fun AttachmentImageThumb(attachment: AgentAttachment) {
     // 读盘 + 解码放 IO 线程：以前在 remember 里同步 decodeFile，滚到带图消息时会卡主线程。
     // 采样与 OOM 兜底统一走 decodeSampledBitmap。
-    val bitmap by produceState<ImageBitmap?>(null, attachment.localPath) {
-        value = withContext(Dispatchers.IO) {
-            decodeSampledBitmap(attachment.localPath, THUMBNAIL_MAX_EDGE)
-        }
+    val path = attachment.localPath
+    val bitmap by produceState<ImageBitmap?>(ThumbnailCache.peek(path), path) {
+        value = ThumbnailCache.peek(path) ?: withContext(Dispatchers.IO) { ThumbnailCache.load(path) }
     }
     val loaded = bitmap
     if (loaded != null) {

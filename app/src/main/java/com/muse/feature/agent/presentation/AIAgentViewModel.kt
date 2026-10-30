@@ -363,7 +363,9 @@ class AIAgentViewModel @Inject constructor(
         if (state.sessionId != sid || !state.loaded || !state.hasMore) return
         val currentLimit = _messageLimit.value[sid] ?: defaultLimit
         if (loadedMessageLimits[sid] != currentLimit) return
-        _messageLimit.value = _messageLimit.value + (sid to (currentLimit + 30))
+        // 按当前上限的一定比例递增：一轮长过程折叠后可见项很少，定步长 30 条要连续补载很多次才能翻过它。
+        // 单次步长封顶 90：每次补载都要重查、重转换并重建列表，步长随上限无界增长会让单次卡顿越来越长。
+        _messageLimit.value = _messageLimit.value + (sid to (currentLimit + (currentLimit / 2).coerceIn(30, 90)))
     }
 
     /** 容器初始化实时进度（解压/部署/装包），AI 页底部气泡展示。 */
@@ -873,7 +875,8 @@ class AIAgentViewModel @Inject constructor(
                         .toList(),
                     loaded = true,
                     hasMore = list.size >= limit,
-                    isLoadingMore = false
+                    isLoadingMore = false,
+                    limit = limit
                 )
             }.flowOn(Dispatchers.Default)
                 .onEach { loadedMessageLimits[id] = limit }
@@ -1848,6 +1851,14 @@ class AIAgentViewModel @Inject constructor(
         // 本轮是否处于 goal 自主循环（用于「打断即暂停」）与本轮是否有活动（用于空回合熔断）。
         var goalActiveAtTurn = false
         var turnHadActivity = false
+        // 首条消息的 LLM 标题请求延后到主请求收到首个内容（或本轮结束）再发：
+        // 并发槽很少的本地模型会让主请求在服务端排在标题请求之后。
+        var pendingTitleRequest: (() -> Unit)? = null
+        fun startPendingTitle() {
+            val start = pendingTitleRequest ?: return
+            pendingTitleRequest = null
+            start()
+        }
         val isGoalTurn = !persistUserMessage
         try {
             var failed = false
@@ -1883,8 +1894,10 @@ class AIAgentViewModel @Inject constructor(
                 if (isFirst && !skipTitleUpdate) {
                     sessionUseCase.updateTitle(sessionId, sessionUseCase.deriveTitle(request))
                     // 后台异步用 LLM 生成更贴切的标题替换临时标题；失败/取不到时保留临时标题
-                    viewModelScope.launch {
-                        agentWorkflow.generateTitle(sessionId, request)?.let { sessionUseCase.updateTitle(sessionId, it) }
+                    pendingTitleRequest = {
+                        viewModelScope.launch {
+                            agentWorkflow.generateTitle(sessionId, request)?.let { sessionUseCase.updateTitle(sessionId, it) }
+                        }
                     }
                 }
             } else {
@@ -1957,6 +1970,7 @@ class AIAgentViewModel @Inject constructor(
             ).collect { event ->
                 when (event) {
                     is AgentEvent.AssistantDelta -> {
+                        startPendingTitle()
                         if (event.accumulated.hasVisibleContent()) {
                             finishReasoning()
                             turnHadActivity = true
@@ -1966,6 +1980,7 @@ class AIAgentViewModel @Inject constructor(
                         setStreamingText(sessionId, event.accumulated)
                     }
                     is AgentEvent.ReasoningDelta -> {
+                        startPendingTitle()
                         setRetryState(sessionId, null)
                         setKeySwitchState(sessionId, null)
                         if (currentReasoningStart == null) {
@@ -1977,6 +1992,7 @@ class AIAgentViewModel @Inject constructor(
                         setStreamingReasoning(sessionId, event.accumulated)
                     }
                     is AgentEvent.ToolCallPreparing -> {
+                        startPendingTitle()
                         finishReasoning()
                         // 工具名先于参数到达：让 UI 把「正在思考」换成具体场景（「正在编辑文件」）。
                         // 参数流完、工具真正开始执行后由 ToolCallStarted 清掉，改由工具行表达。
@@ -2034,6 +2050,7 @@ class AIAgentViewModel @Inject constructor(
                         )
                     }
                     is AgentEvent.AssistantText -> {
+                        startPendingTitle()
                         finishReasoning()
                         val reasoningDuration = currentReasoningStart?.let { start ->
                             currentReasoningEnd?.minus(start)
@@ -2228,6 +2245,7 @@ class AIAgentViewModel @Inject constructor(
                  }
              }
         } finally {
+            startPendingTitle()
             val isOwnJob = sessionJobs[sessionId] == coroutineContext[Job]
             FileLogger.d(TAG, "stream finally: sid=$sessionId isOwnJob=$isOwnJob state=${_agentStates.value[sessionId]}")
             // 子会话并发名额的兜底释放：正常路径已由 COMPLETED/FAILED/STOPPED 事件移出活跃集合，

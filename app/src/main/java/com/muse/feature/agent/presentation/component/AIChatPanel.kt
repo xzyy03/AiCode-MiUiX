@@ -180,6 +180,11 @@ internal data class ChatRenderItem(
     val groupMember: Boolean = false,
 )
 
+/** 消息条数超过此值后，渲染项列表改在后台线程重建。 */
+private const val ASYNC_CHAT_ITEMS_THRESHOLD = 120
+
+private class AsyncChatItems(val sessionId: String?, val items: List<ChatRenderItem>)
+
 /** 工具调用分组头 item 的 contentType。 */
 private const val TOOL_GROUP_CONTENT_TYPE = "tool-group"
 
@@ -835,7 +840,11 @@ fun AIChatPanel(
     }
     SideEffect { turnKeyHistory.putAll(stableTurnKeys) }
     val activeTurnKey = if (isBusy) messages.lastOrNull()?.let { stableTurnKeys[it.id] } else null
-    val chatItems = remember(messages, toolGroupOverrideSnapshot, turnOverrideSnapshot, activeTurnKey, currentSessionId, stableTurnKeys) {
+    // 长会话里重建整张列表要遍历全部消息（拆轮、分组、拆块），在主线程上做会卡住每次落库与补载历史。
+    // 超过阈值后改在后台算，算完前继续显示上一版（LazyColumn 与它的条数一直自洽）；
+    // 切换会话后的首版仍同步算，避免短暂显示上一个会话的内容。
+    val chatItemsKey = remember(messages, toolGroupOverrideSnapshot, turnOverrideSnapshot, activeTurnKey, currentSessionId, stableTurnKeys) { Any() }
+    val buildItems = {
         flattenChatProcesses(buildChatItems(
             messages = messages,
             groupOverrides = toolGroupOverrideSnapshot,
@@ -845,6 +854,16 @@ fun AIChatPanel(
             turnKeys = stableTurnKeys,
         ))
     }
+    val useAsyncItems = messages.size > ASYNC_CHAT_ITEMS_THRESHOLD
+    var asyncItems by remember { mutableStateOf<AsyncChatItems?>(null) }
+    LaunchedEffect(chatItemsKey, useAsyncItems) {
+        if (!useAsyncItems) return@LaunchedEffect
+        val sessionId = currentSessionId
+        val built = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { buildItems() }
+        asyncItems = AsyncChatItems(sessionId, built)
+    }
+    val readyAsyncItems = asyncItems?.takeIf { useAsyncItems && it.sessionId == currentSessionId }
+    val chatItems = readyAsyncItems?.items ?: remember(chatItemsKey) { buildItems() }
     // 每轮任务的总耗时（用户发送 → 本轮 AI 收工）与 token 合计，都只挂在轮末助手气泡下方
     val taskDurations = remember(messages, isBusy) {
         computeTaskDurations(messages, lastTurnFinished = !isBusy)
@@ -1427,16 +1446,19 @@ fun AIChatPanel(
     // fling 中 index 每跨一个 item 就变一次，会让整个 AIChatPanel 大函数随之重组、连带全部可见
     // item 重组，是快速滚动掉帧（进而 fling 补偿跳变、抽搐）的主要放大器。改为在协程内用
     // snapshotFlow 观察 index，组合体完全不读它。
+    // 触发信号里带上分页上限：消息按条数分页，一轮长过程折叠后整页补载可能一个可见项都不增加，
+    // index 不再变化；只监听 index 会卡在这里，要用户上下晃动才能再触发一页。
+    // 上限纳入信号后，每页补载完成都会重新判断，仍在顶部就连续补载。
     val latestMessagesState = rememberUpdatedState(messagesState)
     LaunchedEffect(listState, messagesReady) {
         if (!messagesReady) return@LaunchedEffect
-        snapshotFlow { listState.firstVisibleItemIndex }
+        snapshotFlow {
+            val ms = latestMessagesState.value
+            Triple(listState.firstVisibleItemIndex <= 3 && ms.hasMore && !ms.isLoadingMore, ms.sessionId, ms.limit)
+        }
             .distinctUntilChanged()
-            .collect { index ->
-                val ms = latestMessagesState.value
-                if (index <= 3 && ms.hasMore && !ms.isLoadingMore) {
-                    viewModel.loadMoreMessages()
-                }
+            .collect { (shouldLoad, _, _) ->
+                if (shouldLoad) viewModel.loadMoreMessages()
             }
     }
 

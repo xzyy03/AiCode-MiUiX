@@ -48,23 +48,25 @@ class MessagePersistenceUseCase @Inject constructor(
 
     /** 内嵌图片 base64 的 LRU 缓存：key = path:size:lastModified，避免工具循环中
      *  每轮 LLM 调用都重读文件 + base64 编码。带条目与总字节双重上限。 */
-    private val imageBase64Cache = object : LinkedHashMap<String, String>(16, 0.75f, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>?): Boolean =
+    private class CachedImage(val mimeType: String, val base64: String)
+
+    private val imageBase64Cache = object : LinkedHashMap<String, CachedImage>(16, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, CachedImage>?): Boolean =
             size > MAX_IMAGE_CACHE_ENTRIES
     }
     private var imageCacheBytes = 0L
 
-    private fun cachedImageBase64(key: String): String? = synchronized(imageBase64Cache) { imageBase64Cache[key] }
+    private fun cachedImageBase64(key: String): CachedImage? = synchronized(imageBase64Cache) { imageBase64Cache[key] }
 
-    private fun cacheImageBase64(key: String, value: String) {
+    private fun cacheImageBase64(key: String, value: CachedImage) {
         synchronized(imageBase64Cache) {
             val old = imageBase64Cache.put(key, value)
-            imageCacheBytes += value.length - (old?.length ?: 0)
+            imageCacheBytes += value.base64.length - (old?.base64?.length ?: 0)
             while (imageCacheBytes > MAX_IMAGE_CACHE_BYTES && imageBase64Cache.isNotEmpty()) {
                 val it = imageBase64Cache.entries.iterator()
                 val eldest = it.next()
                 it.remove()
-                imageCacheBytes -= eldest.value.length
+                imageCacheBytes -= eldest.value.base64.length
             }
         }
     }
@@ -366,17 +368,18 @@ class MessagePersistenceUseCase @Inject constructor(
         val key = "$localPath:${file.length()}:${file.lastModified()}"
         cachedImageBase64(key)?.let { cached ->
             return com.muse.feature.agent.domain.model.AgentImage(
-                mimeType = mimeType.ifBlank { "image/jpeg" },
-                base64Data = cached,
+                mimeType = cached.mimeType,
+                base64Data = cached.base64,
                 path = containerPath
             )
         }
         return try {
-            val bytes = file.readBytes()
-            val base64 = java.util.Base64.getEncoder().encodeToString(bytes)
-            cacheImageBase64(key, base64)
+            val (mime, base64) = com.muse.core.util.ImageDownscaler.downscaleToBase64(
+                file.readBytes(), mimeType.ifBlank { "image/jpeg" }
+            )
+            cacheImageBase64(key, CachedImage(mime, base64))
             com.muse.feature.agent.domain.model.AgentImage(
-                mimeType = mimeType.ifBlank { "image/jpeg" },
+                mimeType = mime,
                 base64Data = base64,
                 path = containerPath
             )
